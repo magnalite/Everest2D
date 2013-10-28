@@ -1,0 +1,730 @@
+<roblox xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.roblox.com/roblox.xsd" version="4">
+	<External>null</External>
+	<External>nil</External>
+	<Item class="Model">
+		<Properties>
+<string name="Name">ProjectRBXM</string>
+		</Properties>
+<Item class="Model">
+		<Properties>
+<string name="Name">src</string>
+		</Properties>
+<Item class="Model">
+		<Properties>
+<string name="Name">game</string>
+		</Properties>
+<Item class="Model">
+		<Properties>
+<string name="Name">entities</string>
+		</Properties>
+<Item class="Script">
+			<Properties>
+<string name="Name">Entity</string>
+<ProtectedString name="Source">--client
+repeat wait() until _G.Import
+_G.Import(&quot;Import&quot;)
+
+do Entity = {}
+	_G.Entity = Entity
+	Entity.__index = Entity
+	
+	function Entity.new(level, posX, posY)
+		entity = {}
+		setmetatable(entity, Entity)
+		
+		entity.level = level
+		table.insert(level.entities, entity)
+		entity.levelId = #level.entities
+		entity.posX = posX
+		entity.posY = posY
+		
+		return entity
+	end
+	
+	function Entity:tick()
+		
+	end
+	
+	function Entity:render()
+		error(&quot;Attempted to render base entity&quot;)
+	end	
+	
+end</ProtectedString>
+			</Properties>
+		</Item><Item class="Script">
+			<Properties>
+<string name="Name">Mob</string>
+<ProtectedString name="Source">--client
+repeat wait() until _G.Import
+_G.Import(&quot;Import&quot;)
+
+Import(&quot;Extends&quot;)
+Import(&quot;Entity&quot;)
+
+do Mob = Extends(Entity)
+	_G.Mob = Mob
+	Mob.__index = Mob	
+	
+	function Mob.new(game, level, name, speed, posX, posY)
+		local mob = Entity.new(level, posX, posY)
+		setmetatable(mob, Mob)
+		
+		mob.name = name
+		mob.speed = speed
+		mob.numSteps = 0
+		mob.isMoving = false
+		mob.movingDir = &quot;SOUTH&quot;
+		mob.scale = 1
+		mob.frame = Instance.new(&quot;ImageLabel&quot;, game.screen.frame)
+		mob.frame.BorderSizePixel = 0
+		mob.frame.BackgroundTransparency = 1
+		mob.frame.ZIndex = 5
+		
+		return mob
+	end
+	
+	function Mob:move(xa, ya)
+		if xa ~= 0 and ya ~= 0 then
+			self:move(xa, 0)
+			self:move(0, ya)
+			self.numSteps = self.numSteps - 1
+			return
+		end	
+		
+		self.numSteps = self.numSteps + 1
+		
+		if not self:hasCollided(xa, ya) then
+			if ya &lt; 0 then self.movingDir = &quot;NORTH&quot; end
+			if ya &gt; 0 then self.movingDir = &quot;SOUTH&quot; end
+			if xa &lt; 0 then self.movingDir = &quot;WEST&quot; end
+			if xa &gt; 0 then self.movingDir = &quot;EAST&quot; end
+			
+			self.posX = math.min(self.posX + (xa * self.speed), self.level.width)
+			self.posX = math.max(self.posX, 0)
+			self.posY = math.min(self.posY + (ya * self.speed), self.level.height)
+			self.posY = math.max(self.posY, 0)
+		end	
+		
+	end
+	
+	function Mob:hasCollided()
+		error(&quot;Attempted to call hasCollided on native mob class.&quot;)
+	end
+	
+end
+</ProtectedString>
+			</Properties>
+		</Item><Item class="Script">
+			<Properties>
+<string name="Name">Player</string>
+<ProtectedString name="Source">--client
+repeat wait() until _G.Import
+_G.Import(&quot;Import&quot;)
+
+Import(&quot;Extends&quot;)
+Import(&quot;Mob&quot;)
+
+do Player = Extends(Mob)
+	_G.Player = Player
+	Player.__index = Player
+		
+	Import(&quot;SpriteSheet&quot;)
+	
+	function Player.new(game, level, posX, posY, input)
+		local player = Mob.new(game, level, &quot;Player&quot;, 0.2, posX, posY)
+		setmetatable(player, Player)
+		
+		player.input = input	
+		player.scale = 2
+		player.game = game
+		player.frame.Name = &quot;Player&quot;
+		player.frame.Image = SpriteSheet.BasicSpriteSheet.url
+		player.frame.ImageRectSize = Vector2.new(31, 31)
+		player.frame.ImageRectOffset = Vector2.new(0, (14 * 16) + 1)
+		
+		return player
+	end
+	
+	function Player:tick()
+		local xa = 0
+		local ya = 0
+		
+		if self.input.keys[&quot;w&quot;] then
+			ya = ya - 1
+		end
+		if self.input.keys[&quot;s&quot;] then
+			ya = ya + 1
+		end
+		if self.input.keys[&quot;a&quot;] then
+			xa = xa - 1
+		end
+		if self.input.keys[&quot;d&quot;] then
+			xa = xa + 1
+		end
+		
+		if xa ~= 0 or ya ~= 0 then
+			self:move(xa, ya)
+			self.isMoving = true
+		else
+			self.isMoving = false
+		end
+		
+	end	
+	
+	function Player:render()
+		if self.frame.Size ~= UDim2.new((1 * self.scale) / self.game.screen.sizeX, 0, (1 * self.scale) / self.game.screen.sizeY) then
+			self.frame:TweenSize(UDim2.new((1 * self.scale) / self.game.screen.sizeX, 0, (1 * self.scale) / self.game.screen.sizeY), &quot;Out&quot;, &quot;Linear&quot;, 0.2, true)
+		end	
+		self.frame:TweenPosition(UDim2.new(self.posX / self.game.screen.sizeX, 0, self.posY / self.game.screen.sizeY, 0), &quot;Out&quot;, &quot;Linear&quot;, 0.1, true)	
+		
+		if self.movingDir == &quot;WEST&quot; then
+			self.frame.ImageRectOffset = Vector2.new(0, (14 * 16) + 1)
+			self.frame.ImageRectSize = Vector2.new(31, 31)
+		end
+		if self.movingDir == &quot;EAST&quot; then
+			self.frame.ImageRectOffset = Vector2.new(31, (14 * 16) + 1)
+			self.frame.ImageRectSize = Vector2.new(-31, 31)			
+		end
+	end
+	
+	function Player:hasCollided()
+		
+	end
+	
+end</ProtectedString>
+			</Properties>
+		</Item>
+</Item><Item class="Model">
+		<Properties>
+<string name="Name">graphics</string>
+		</Properties>
+<Item class="Script">
+			<Properties>
+<string name="Name">Screen</string>
+<ProtectedString name="Source">--client
+repeat wait() until _G.Import
+_G.Import(&quot;Import&quot;)
+
+
+do Screen = {}
+	_G.Screen = Screen
+	Screen.__index = Screen
+	
+	function Screen.new(game, sizeX, sizeY)
+		local screen = {}
+		setmetatable(screen, Screen)		
+		
+		screen.ClippingMask = Instance.new(&quot;Frame&quot;, game.canvas)
+		screen.ClippingMask.Size = UDim2.new(1,0,1,0)
+		screen.ClippingMask.BackgroundColor3 = Color3.new(0,0,0)
+		screen.ClippingMask.BackgroundTransparency = 0
+		
+		screen.frame = Instance.new(&quot;Frame&quot;, game.canvas)
+		screen.frame.Size = UDim2.new(1,0,1,0)
+		screen.frame.ZIndex = 2
+		screen.frame.BackgroundTransparency = 1
+		
+		screen.game = game
+		screen.sizeX = sizeX
+		screen.sizeY = sizeY
+		screen.rendered = {}
+		
+		return screen
+	end
+	
+	Import(&quot;Tile&quot;)
+	
+	
+	function Screen:render(posX, posY)	
+		
+		while not self.game.level.ready and not #Tile.Tiles &gt; 0 do wait() end
+		
+		local posX = math.min(self.game.level.width + 1 - self.sizeX, posX)
+		local posY = math.min(self.game.level.height + 1 - self.sizeY, posY)
+		local posX = math.max(0, posX)
+		local posY = math.max(0, posY) 		
+		
+		self.frame:TweenPosition(UDim2.new(-(posX / self.sizeX), 0, -(posY / self.sizeY), 0), &quot;Out&quot;, &quot;Linear&quot;, 0.2, true)	
+		
+		local used = {}		
+		
+		posX = math.floor(posX)		
+		posY = math.floor(posY)				
+		
+		for x = math.floor(-self.sizeX / 4), math.floor(self.sizeX + self.sizeY / 4) do
+			for y = math.floor(-self.sizeY / 4), math.floor(self.sizeY + self.sizeY / 4) do
+				local posXX = math.min(self.game.level.width, posX + x)
+				local posYY = math.min(self.game.level.height, posY + y)
+				local posXX = math.max(0, posXX)
+				local posYY = math.max(0, posYY) 
+
+				self.rendered[posXX] = self.rendered[posXX] or {}
+				used[posXX] = used[posXX] or {}
+				used[posXX][posYY] = true
+				if not self.rendered[posXX][posYY] then
+					self.rendered[posXX][posYY] = Tile.Tiles[self.game.level.tiles[posXX][posYY]]:render(self, posXX, posYY)
+				end
+			end
+		end
+		
+		for x, ytab in pairs(self.rendered) do
+			for y, tile in pairs(ytab) do		
+				if not used[x] then				
+					for y, tile in pairs(ytab) do
+						tile:Destroy()
+					end
+					self.rendered[x] = nil
+					break
+				elseif not used[x][y] then
+					tile:Destroy()
+					self.rendered[x][y] = nil				
+				end			
+			end
+		end
+	end		
+end</ProtectedString>
+			</Properties>
+		</Item><Item class="Script">
+			<Properties>
+<string name="Name">SpriteSheet</string>
+<ProtectedString name="Source">--client
+repeat wait() until _G.Import
+_G.Import(&quot;Import&quot;)
+
+
+do SpriteSheet = {}
+	_G.SpriteSheet = SpriteSheet
+	SpriteSheet.__index = SpriteSheet
+	
+	function SpriteSheet.new(name, urlId, spriteSizeX, spriteSizeY)
+		local spriteSheet = {}
+		setmetatable(spriteSheet, SpriteSheet)
+	
+		spriteSheet.name = name
+		spriteSheet.url = &quot;http://www.roblox.com/asset/?id=&quot; .. urlId
+		spriteSheet.spriteSizeX = spriteSizeX
+		spriteSheet.spriteSizeY = spriteSizeY
+		spriteSheet.vector2Size = Vector2.new(spriteSizeX, spriteSizeY)
+	
+		return spriteSheet
+	end
+	
+	SpriteSheet.BasicSpriteSheet = SpriteSheet.new(&quot;basic&quot;, 133851450, 16, 16)		
+	
+end</ProtectedString>
+			</Properties>
+		</Item>
+</Item><Item class="Model">
+		<Properties>
+<string name="Name">level</string>
+		</Properties>
+<Item class="Model">
+		<Properties>
+<string name="Name">tiles</string>
+		</Properties>
+<Item class="Script">
+			<Properties>
+<string name="Name">BasicTile</string>
+<ProtectedString name="Source">--client
+
+repeat wait() until _G.Import
+_G.Import(&quot;Import&quot;)
+
+Import(&quot;Extends&quot;)
+Import(&quot;Tile&quot;)
+
+
+repeat wait() until Extends
+do BasicTile = Extends(Tile)
+	_G.BasicTile = BasicTile
+	BasicTile.__index = BasicTile
+	
+	function BasicTile.new(id, spriteSheet, spritePosX, spritePosY)
+		basicTile = Tile.new(id, true)
+		setmetatable(basicTile, BasicTile)
+		
+		basicTile.spriteSheet = spriteSheet
+		basicTile.spritePosX = spritePosX
+		basicTile.spritePosY = spritePosY
+		basicTile.spriteSizeX = spriteSheet.spriteSizeX-1
+		basicTile.spriteSizeY = spriteSheet.spriteSizeY-1	
+		basicTile.spritePosVec = Vector2.new(spritePosX-1, spritePosY-1)
+		
+		return basicTile	
+	end	
+	
+end</ProtectedString>
+			</Properties>
+		</Item><Item class="Script">
+			<Properties>
+<string name="Name">Tile</string>
+<ProtectedString name="Source">--client
+repeat wait() until _G.Import
+_G.Import(&quot;Import&quot;)
+
+do Tile = {}
+	_G.Tile = Tile
+	Tile.__index = Tile
+	
+	Tile.Tiles = {}
+	
+	function Tile.new(id, isWalkable)
+		local tile = {}
+		setmetatable(tile, Tile)		
+		
+		if Tile.Tiles[id] then error(&quot;Tile ID Conflict id: &quot; .. id) end
+		Tile.Tiles[id] = tile
+		
+		tile.id = id
+		tile.isWalkable = isWalkable
+				
+		return tile
+	end
+	
+	function Tile:render(screen, posX, posY)
+		
+		local rendered = Instance.new(&quot;ImageLabel&quot;, screen.frame)
+		rendered.BorderSizePixel = 0
+		rendered.ZIndex = 2
+		rendered.Size = UDim2.new(1.05 / screen.sizeX, 0, 1.05 / screen.sizeY, 0)
+		rendered.Position = UDim2.new(posX / screen.sizeX, 0, posY / screen.sizeY, 0)
+		rendered.Image = self.spriteSheet.url
+		rendered.ImageRectSize = self.spriteSheet.vector2Size
+		rendered.ImageRectOffset = self.spritePosVec
+		
+		return rendered
+	end
+	
+	Import(&quot;BasicTile&quot;)
+	Import(&quot;SpriteSheet&quot;)
+	
+	Tile.GRASS = BasicTile.new(1, SpriteSheet.BasicSpriteSheet, 0, 0)
+	Tile.FLOWER1 = BasicTile.new(2, SpriteSheet.BasicSpriteSheet, 16, 0)
+	Tile.FLOWER2 = BasicTile.new(3, SpriteSheet.BasicSpriteSheet, 32, 0)
+end</ProtectedString>
+			</Properties>
+		</Item>
+</Item><Item class="Script">
+			<Properties>
+<string name="Name">Level</string>
+<ProtectedString name="Source">--client
+repeat wait() until _G.Import
+_G.Import(&quot;Import&quot;)
+
+
+do Level = {}
+	_G.Level = Level
+	Level.__index = Level
+	
+	function Level.new(width, height)
+		local level = {}
+		setmetatable(level, Level)
+		
+		level.width = width
+		level.height = height
+		level.tiles = {}
+		level.entities = {}
+		
+		for x = 0, level.width do
+			level.tiles[x] = {}
+		end		
+		
+		return level
+	end
+	
+	Import(&quot;Tile&quot;)	
+	
+	function Level:tick()
+		for _, entity in pairs(self.entities) do
+			entity:tick()
+		end
+		
+	end	
+	
+	function Level:render()
+		for _, entity in pairs(self.entities) do
+			entity:render()
+		end
+	end
+	
+	function Level:testRandomGenerate()
+
+		for x = 0, self.width do
+			for y = 0, self.height do
+				local rand = math.random(1, 30)
+				if rand == 10 then
+					self.tiles[x][y] = Tile.FLOWER1.id
+				elseif rand == 20 then
+					self.tiles[x][y] = Tile.FLOWER2.id
+				else
+					self.tiles[x][y] = Tile.GRASS.id
+				end
+			end
+		end	
+		
+		self.ready = true
+	end		
+		
+end
+
+</ProtectedString>
+			</Properties>
+		</Item>
+</Item><Item class="Model">
+		<Properties>
+<string name="Name">util</string>
+		</Properties>
+<Item class="Script">
+			<Properties>
+<string name="Name">Extends</string>
+<ProtectedString name="Source">--client
+function _G.Extends(toExtend)
+	local extendee = {}
+	setmetatable(extendee, toExtend)
+	
+	return extendee
+end</ProtectedString>
+			</Properties>
+		</Item><Item class="Script">
+			<Properties>
+<string name="Name">Import</string>
+<ProtectedString name="Source">--client
+function _G.Import(toImport)
+	repeat wait() until _G[toImport]
+	getfenv(2)[toImport] = _G[toImport]
+end
+</ProtectedString>
+			</Properties>
+		</Item><Item class="Script">
+			<Properties>
+<string name="Name">LocalPlayer</string>
+<ProtectedString name="Source">--client
+_G.LocalPlayer = game.Players.LocalPlayer</ProtectedString>
+			</Properties>
+		</Item>
+</Item><Item class="Script">
+			<Properties>
+<string name="Name">Game</string>
+<ProtectedString name="Source">--client
+repeat wait() until game.Players.LocalPlayer.Character
+game.Players.LocalPlayer.Character:Destroy()
+repeat wait() until _G.Import
+_G.Import(&quot;Import&quot;)
+
+Import(&quot;LocalPlayer&quot;)
+
+do Game = {}
+	_G.Game = Game
+	Game.__index = Game
+
+	function Game.new()
+		local game = {}
+		setmetatable(game, Game)
+		
+		Import(&quot;Screen&quot;)
+		Import(&quot;Level&quot;)
+		Import(&quot;InputHandler&quot;)
+		Import(&quot;Player&quot;)
+		
+		game.canvas = Instance.new(&quot;ScreenGui&quot;, LocalPlayer.PlayerGui)
+		
+		game.level = Level.new(100, 100)
+		repeat wait() until game.level.testRandomGenerate
+		game.level:testRandomGenerate()
+		
+		game.screen = Screen.new(game, 32, math.floor(32 * (game.canvas.AbsoluteSize.Y / game.canvas.AbsoluteSize.X)))
+		game.running = false
+		game.localPlayer = LocalPlayer
+		game.inputHandler = InputHandler.new(game)
+		game.player = Player.new(game, game.level, 0, 0, game.inputHandler)		
+		
+		game.tickCount = 0
+		game.frameCount = 0
+		
+		return game
+	end
+
+	function Game:start()
+		self.running = true
+		
+		coroutine.wrap(function()
+			self:run()
+		end)()
+	end
+	
+	function Game:stop()
+		self.running = false
+	end
+
+	function Game:run()
+		local timeAtStart tick()
+		local lastTime = tick()
+		local minTimePerTick = 1/60
+		local minTimePerFrame = 1/60
+		
+		local ticks = 0
+		local frames = 0
+	
+		local lastTimer = tick()
+		local unProcessedTime = 0
+		local unRenderedTime = 0
+		
+		while (self.running) do
+			local now = tick()
+			unProcessedTime = unProcessedTime + ((now - lastTime) / minTimePerTick)
+			unRenderedTime = unRenderedTime + ((now - lastTime) / minTimePerFrame)
+			lastTime = now
+			
+			while (unProcessedTime &gt;= 1) do
+				ticks = ticks + 1
+				self:tick()
+				unProcessedTime = unProcessedTime - 1
+			end
+			
+			while (unRenderedTime &gt;= 1) do		
+				frames = frames + 1
+				self:render()
+				unRenderedTime = unRenderedTime - 1
+			end
+			
+			wait(0)
+			
+			if (now - lastTimer &gt;= 1 ) then				
+				lastTimer = lastTimer + 1
+				print(frames .. &quot; frames : &quot; .. ticks .. &quot; ticks&quot;)
+				frames = 0
+				ticks = 0			
+			end
+		end
+	end
+	
+	function Game:tick()
+		self.tickCount = self.tickCount + 1
+		self.level:tick()
+		
+	end
+	
+	function Game:render()
+		self.frameCount = self.frameCount + 1
+		self.level:render()
+		self.screen:render(self.player.posX - (self.screen.sizeX / 2), self.player.posY - (self.screen.sizeY / 2))
+		
+	end
+end
+
+do --MAIN
+	game.StarterGui:SetCoreGuiEnabled(2, false)
+	wait(2)
+	local game = Game.new()
+	game:start()
+end</ProtectedString>
+			</Properties>
+		</Item><Item class="Script">
+			<Properties>
+<string name="Name">InputHandler</string>
+<ProtectedString name="Source">--client
+repeat wait() until _G.Import
+_G.Import(&quot;Import&quot;)
+
+do InputHandler = {}
+	_G.InputHandler = InputHandler
+	InputHandler.__index = InputHandler
+	
+	function InputHandler.new(game)
+		local inputHandler = {}
+		setmetatable(inputHandler, InputHandler)		
+		
+		inputHandler.keys = {}
+		inputHandler.mouse = game.localPlayer:GetMouse()		
+		
+		inputHandler.mouse.KeyDown:connect(function(key) inputHandler:keyDown(key) end)		
+		inputHandler.mouse.KeyUp:connect(function(key) inputHandler:keyUp(key) end)			
+		
+		return inputHandler
+	end
+	
+	function InputHandler:keyDown(key)
+		self.keys[key] = true
+	end
+	
+	function InputHandler:keyUp(key)
+		self.keys[key] = false		
+	end
+end</ProtectedString>
+			</Properties>
+		</Item>
+</Item>
+</Item><Item class="Script">
+			<Properties>
+<string name="Name">compile</string>
+<ProtectedString name="Source">require(&quot;LuaXML&quot;)
+local lfs = require(&quot;lfs&quot;)
+
+local a = xml.load(&quot;.buildpath&quot;):find(&quot;buildpathentry&quot;)
+local projname = xml.load(&quot;.project&quot;):find(&quot;name&quot;)[1]
+local result = xml.new(&quot;roblox&quot;) do
+        result[&quot;xmlns:xmime&quot;]=&quot;http://www.w3.org/2005/05/xmlmime&quot;
+        result[&quot;version&quot;]=&quot;4&quot;
+        result[&quot;xsi:noNameSpaceSchemaLocation&quot;]=&quot;http://www.roblox.com/roblox.xsd&quot;
+        result[&quot;xmlns:xsi&quot;]=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+end
+
+local ignore = { }
+if a[&quot;excluding&quot;] then
+        for file in a[&quot;excluding&quot;]:gmatch(&quot;[^|]+&quot;) do
+                local f = &quot;.\\&quot;..a[&quot;path&quot;]..&quot;\\&quot;..file:gsub(&quot;/&quot;, &quot;\\&quot;)
+                ignore[f] = true
+                print(&quot;ignore:&quot;, f)
+        end
+end        
+
+function browse(parent)
+        local ret = { }
+        for file in lfs.dir(parent) do
+                if file ~= &quot;.&quot; and file ~= &quot;..&quot; then
+                        if lfs.attributes(parent..&quot;\\&quot;..file, &quot;mode&quot;) == &quot;directory&quot; then
+                                ret[file] = browse(parent..&quot;\\&quot;..file)
+                        else
+                                if not ignore[parent..&quot;\\&quot;..file] then
+                                        table.insert(ret, parent..&quot;\\&quot;..file)
+                                end
+                        end
+                end
+        end
+        return ret
+end
+local p3
+local parent = (&quot;.\\&quot;..a[&quot;path&quot;])
+local toexport = browse(parent)
+local p1 = result:append(&quot;Item&quot;)
+p1[&quot;class&quot;]=&quot;StringValue&quot;
+p1[&quot;referent&quot;]=&quot;RBX0&quot;
+local p2 = p1:append(&quot;Properties&quot;)
+p2:append(&quot;string&quot;)[&quot;name&quot;]=&quot;Name&quot;;p2:find(&quot;string&quot;, &quot;name&quot;, &quot;Name&quot;)[1]=projname
+p2:append(&quot;string&quot;)[&quot;name&quot;]=&quot;Value&quot;;p2:find(&quot;string&quot;, &quot;name&quot;, &quot;Value&quot;)[1]=&quot;&quot;
+
+function export(from)
+        for file, data in pairs(from) do
+                if type(data) == &quot;table&quot; then
+                        p3 = p1:append(&quot;Item&quot;)
+                        p3[&quot;class&quot;]=&quot;StringValue&quot;
+                        p3[&quot;referent&quot;]=&quot;RBX0&quot;
+                        local p4 = p3:append(&quot;Properties&quot;)
+                        p4:append(&quot;string&quot;)[&quot;name&quot;]=&quot;Name&quot;;p4:find(&quot;string&quot;, &quot;name&quot;, &quot;Name&quot;)[1]=file
+                        p4:append(&quot;string&quot;)[&quot;name&quot;]=&quot;Value&quot;;p4:find(&quot;string&quot;, &quot;name&quot;, &quot;Value&quot;)[1]=&quot;&quot;
+                        export(data)
+                else
+                        local read = io.open(data, &quot;r&quot;)
+                        local sType = read:read()
+                        local item = (p3 or p1):append(&quot;Item&quot;)
+                        if sType == &quot;--server&quot; then
+                                item[&quot;class&quot;]=&quot;Script&quot;
+                        elseif sType==&quot;--client&quot; then
+                                item[&quot;class&quot;]=&quot;LocalScript&quot;
+                        else
+                                error(&quot;Invalid script type in file: &quot;..data:sub(2))
+                        end
+                        item[&quot;referent&quot;]=&quot;RBX0&quot;
+                        local props = item:append(&quot;Properties&quot;)
+                        props:append(&quot;string&quot;)[&quot;name&quot;]=&quot;Name&quot;;props:find(&quot;string&quot;, &quot;name&quot;, &quot;Name&quot;)[1]=(string.gmatch(data:sub(2), &quot;.+\\(.+)&quot;)())
+                        props:append(&quot;ProtectedString&quot;)[&quot;name&quot;]=&quot;Source&quot;;props:find(&quot;ProtectedString&quot;, &quot;name&quot;, &quot;Source&quot;)[1
