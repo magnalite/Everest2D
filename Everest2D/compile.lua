@@ -43,17 +43,19 @@ p1["referent"]="RBX0"
 local p2 = p1:append("Properties")
 p2:append("string")["name"]="Name";p2:find("string", "name", "Name")[1]=projname
 p2:append("string")["name"]="Value";p2:find("string", "name", "Value")[1]=""
+local level = { }
 
-function export(from)
+function export(from, lvl)
         for file, data in pairs(from) do
                 if type(data) == "table" then
-                        p3 = p1:append("Item")
+                        p3 = (level[lvl-1] or p1):append("Item")
                         p3["class"]="StringValue"
                         p3["referent"]="RBX0"
                         local p4 = p3:append("Properties")
                         p4:append("string")["name"]="Name";p4:find("string", "name", "Name")[1]=file
                         p4:append("string")["name"]="Value";p4:find("string", "name", "Value")[1]=""
-                        export(data)
+                        table.insert(level, p3)
+                        export(data, lvl+1)
                 else
                         local read = io.open(data, "r")
                         local sType = read:read()
@@ -75,6 +77,6 @@ function export(from)
         end
 end
 
-export(toexport)
+export(toexport, 1)
 print(result)
 io.open("ver-"..os.time()..".rbxm", "w"):write(tostring(result))
