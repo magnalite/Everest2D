@@ -107,7 +107,7 @@ end
 
 do --MAIN
 	game.StarterGui:SetCoreGuiEnabled(2, false)
-	wait(2)
+	wait(5)
 	local game = Game.new()
 	game:start()
 end

@@ -20,8 +20,8 @@ do Player = Extends(Mob)
 		player.game = game
 		player.frame.Name = "Player"
 		player.frame.Image = SpriteSheet.BasicSpriteSheet.url
-		player.frame.ImageRectSize = Vector2.new(31, 31)
-		player.frame.ImageRectOffset = Vector2.new(0, (14 * 16) + 1)
+		player.frame.ImageRectSize = Vector2.new(32, 32)
+		player.frame.ImageRectOffset = Vector2.new(0, 128)
 		
 		return player
 	end
@@ -53,18 +53,26 @@ do Player = Extends(Mob)
 	end	
 	
 	function Player:render()
+		local animCycle = 2 - math.floor((self.numSteps * (self.speed * 5)) % 30 / 10)	
 		if self.frame.Size ~= UDim2.new((1 * self.scale) / self.game.screen.sizeX, 0, (1 * self.scale) / self.game.screen.sizeY) then
 			self.frame:TweenSize(UDim2.new((1 * self.scale) / self.game.screen.sizeX, 0, (1 * self.scale) / self.game.screen.sizeY), "Out", "Linear", 0.2, true)
 		end	
 		self.frame:TweenPosition(UDim2.new(self.posX / self.game.screen.sizeX, 0, self.posY / self.game.screen.sizeY, 0), "Out", "Linear", 0.1, true)	
-		
-		if self.movingDir == "WEST" then
-			self.frame.ImageRectOffset = Vector2.new(0, (14 * 16) + 1)
+		if self.movingDir == "NORTH" then
+			self.frame.ImageRectOffset = Vector2.new(32 * animCycle, 225)
 			self.frame.ImageRectSize = Vector2.new(31, 31)
 		end
 		if self.movingDir == "EAST" then
-			self.frame.ImageRectOffset = Vector2.new(31, (14 * 16) + 1)
-			self.frame.ImageRectSize = Vector2.new(-31, 31)			
+			self.frame.ImageRectOffset = Vector2.new(32 * animCycle, 193)
+			self.frame.ImageRectSize = Vector2.new(31, 31)			
+		end
+		if self.movingDir == "SOUTH" then
+			self.frame.ImageRectOffset = Vector2.new(32 * animCycle, 129)
+			self.frame.ImageRectSize = Vector2.new(31, 31)
+		end
+		if self.movingDir == "WEST" then
+			self.frame.ImageRectOffset = Vector2.new(32 * animCycle, 161)
+			self.frame.ImageRectSize = Vector2.new(31, 31)			
 		end
 	end
 	

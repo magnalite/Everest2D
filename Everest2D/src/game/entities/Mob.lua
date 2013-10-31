@@ -29,8 +29,8 @@ do Mob = Extends(Entity)
 	
 	function Mob:move(xa, ya)
 		if xa ~= 0 and ya ~= 0 then
-			self:move(xa, 0)
-			self:move(0, ya)
+			self:move(xa / 2, 0)
+			self:move(0, ya / 2)
 			self.numSteps = self.numSteps - 1
 			return
 		end	

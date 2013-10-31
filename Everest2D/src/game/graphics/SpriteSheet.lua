@@ -20,6 +20,6 @@ do SpriteSheet = {}
 		return spriteSheet
 	end
 	
-	SpriteSheet.BasicSpriteSheet = SpriteSheet.new("basic", 133851450, 16, 16)		
+	SpriteSheet.BasicSpriteSheet = SpriteSheet.new("basic", 134063202, 32, 32)		
 	
 end
