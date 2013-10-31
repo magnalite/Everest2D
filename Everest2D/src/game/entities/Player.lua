@@ -54,10 +54,10 @@ do Player = Extends(Mob)
 	
 	function Player:render()
 		local animCycle = 2 - math.floor((self.numSteps * (self.speed * 5)) % 30 / 10)	
-		if self.frame.Size ~= UDim2.new((1 * self.scale) / self.game.screen.sizeX, 0, (1 * self.scale) / self.game.screen.sizeY) then
-			self.frame:TweenSize(UDim2.new((1 * self.scale) / self.game.screen.sizeX, 0, (1 * self.scale) / self.game.screen.sizeY), "Out", "Linear", 0.2, true)
-		end	
-		self.frame:TweenPosition(UDim2.new(self.posX / self.game.screen.sizeX, 0, self.posY / self.game.screen.sizeY, 0), "Out", "Linear", 0.1, true)	
+			
+		self.frame:TweenSize(UDim2.new((1 * self.scale) / self.game.screen.sizeX, 0, (1 * self.scale) / self.game.screen.sizeY), "Out", "Linear", 0.2, true)
+		self.frame:TweenPosition(UDim2.new((self.posX) / self.game.screen.sizeX, 0, (self.posY) / self.game.screen.sizeY, 0), "Out", "Linear", 0.1, true)	
+		
 		if self.movingDir == "NORTH" then
 			self.frame.ImageRectOffset = Vector2.new(32 * animCycle, 225)
 			self.frame.ImageRectSize = Vector2.new(31, 31)
@@ -76,8 +76,9 @@ do Player = Extends(Mob)
 		end
 	end
 	
-	function Player:hasCollided()
-		
+	function Player:hasCollided(xa, ya)
+	
+		return self:isSolidTile(self.posX, self.posY, xa, ya)	
 	end
 	
 end

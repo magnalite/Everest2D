@@ -20,8 +20,9 @@ do Game = {}
 		Import("Player")
 		
 		game.canvas = Instance.new("ScreenGui", LocalPlayer.PlayerGui)
+		game.canvas.Name = "Everest2DGame"
 		
-		game.level = Level.new(100, 100)
+		game.level = Level.new(1000, 1000)
 		repeat wait() until game.level.testRandomGenerate
 		game.level:testRandomGenerate()
 		
@@ -85,6 +86,7 @@ do Game = {}
 			if (now - lastTimer >= 1 ) then				
 				lastTimer = lastTimer + 1
 				print(frames .. " frames : " .. ticks .. " ticks")
+				print(#self.localPlayer.PlayerGui.Everest2DGame.Screen:GetChildren())
 				frames = 0
 				ticks = 0			
 			end

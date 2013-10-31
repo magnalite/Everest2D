@@ -47,6 +47,8 @@ do Level = {}
 					self.tiles[x][y] = Tile.FLOWER1.id
 				elseif rand == 20 then
 					self.tiles[x][y] = Tile.FLOWER2.id
+				elseif rand == 25 then
+					self.tiles[x][y] = Tile.STONE.id
 				else
 					self.tiles[x][y] = Tile.GRASS.id
 				end

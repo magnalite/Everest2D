@@ -38,7 +38,8 @@ do Tile = {}
 	Import("BasicTile")
 	Import("SpriteSheet")
 	
-	Tile.GRASS = BasicTile.new(1, SpriteSheet.BasicSpriteSheet, 0, 0)
-	Tile.FLOWER1 = BasicTile.new(2, SpriteSheet.BasicSpriteSheet, 32, 0)
-	Tile.FLOWER2 = BasicTile.new(3, SpriteSheet.BasicSpriteSheet, 64, 0)
+	Tile.GRASS = BasicTile.new(1, true, SpriteSheet.BasicSpriteSheet, 0, 0)
+	Tile.FLOWER1 = BasicTile.new(2, true, SpriteSheet.BasicSpriteSheet, 32, 0)
+	Tile.FLOWER2 = BasicTile.new(3, true, SpriteSheet.BasicSpriteSheet, 64, 0)
+	Tile.STONE = BasicTile.new(4, false, SpriteSheet.BasicSpriteSheet, 0, 32)
 end

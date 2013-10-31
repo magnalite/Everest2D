@@ -47,12 +47,37 @@ do Mob = Extends(Entity)
 			self.posX = math.max(self.posX, 0)
 			self.posY = math.min(self.posY + (ya * self.speed), self.level.height)
 			self.posY = math.max(self.posY, 0)
+			
+			self.currentTile = self.level.tiles[math.floor(self.posX + 0.5)][math.floor(self.posY + 0.5)]
 		end	
 		
 	end
 	
 	function Mob:hasCollided()
 		error("Attempted to call hasCollided on native mob class.")
+	end
+	
+	Import("Tile")
+	
+	function Mob:isSolidTile(x, y, xa, ya)
+		
+		local x = math.max(0, math.floor(x + xa + 0.5))
+		local x = math.min(self.level.width, x)
+		local y = math.max(0, math.floor(y + ya + 0.5))
+		local y = math.min(self.level.height, y)
+		
+		local solid = false
+		
+		for xi = 0, self.scale - 1 do
+			for yi = 0, self.scale - 1 do
+				local nextTile = Tile.Tiles[self.level.tiles[x + xi][y + yi]]
+				if not nextTile.isWalkable then solid = true end
+			end
+		end
+		local nextTile = Tile.Tiles[self.level.tiles[x][y]]
+		
+		return solid
+
 	end
 	
 end

@@ -15,11 +15,13 @@ do Screen = {}
 		screen.ClippingMask.Size = UDim2.new(1,0,1,0)
 		screen.ClippingMask.BackgroundColor3 = Color3.new(0,0,0)
 		screen.ClippingMask.BackgroundTransparency = 0
+		screen.ClippingMask.Name = "Clipping Mask"
 		
 		screen.frame = Instance.new("Frame", game.canvas)
 		screen.frame.Size = UDim2.new(1,0,1,0)
 		screen.frame.ZIndex = 2
 		screen.frame.BackgroundTransparency = 1
+		screen.frame.Name = "Screen"
 		
 		screen.game = game
 		screen.sizeX = sizeX

@@ -12,8 +12,8 @@ do BasicTile = Extends(Tile)
 	_G.BasicTile = BasicTile
 	BasicTile.__index = BasicTile
 	
-	function BasicTile.new(id, spriteSheet, spritePosX, spritePosY)
-		basicTile = Tile.new(id, true)
+	function BasicTile.new(id, isWalkable, spriteSheet, spritePosX, spritePosY)
+		basicTile = Tile.new(id, isWalkable)
 		setmetatable(basicTile, BasicTile)
 		
 		basicTile.spriteSheet = spriteSheet
