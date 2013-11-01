@@ -61,15 +61,15 @@ do Mob = Extends(Entity)
 	
 	function Mob:isSolidTile(x, y, xa, ya)
 		
-		local x = math.max(0, math.floor(x + xa + 0.5))
+		local x = math.max(0, math.floor(x + xa))
 		local x = math.min(self.level.width, x)
-		local y = math.max(0, math.floor(y + ya + 0.5))
+		local y = math.max(0, math.floor(y + ya))
 		local y = math.min(self.level.height, y)
 		
 		local solid = false
-		
-		for xi = 0, self.scale - 1 do
-			for yi = 0, self.scale - 1 do
+		if x == self.level.width or x == 0 or y == self.level.height or y == 0 then return true end
+		for xi = 0, math.ceil(self.scale) do
+			for yi = 0, math.ceil(self.scale) do
 				local nextTile = Tile.Tiles[self.level.tiles[x + xi][y + yi]]
 				if not nextTile.isWalkable then solid = true end
 			end

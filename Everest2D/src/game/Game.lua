@@ -22,15 +22,13 @@ do Game = {}
 		game.canvas = Instance.new("ScreenGui", LocalPlayer.PlayerGui)
 		game.canvas.Name = "Everest2DGame"
 		
-		game.level = Level.new(1000, 1000)
-		repeat wait() until game.level.testRandomGenerate
-		game.level:testRandomGenerate()
+		game.level = Level.TestLevel
 		
-		game.screen = Screen.new(game, 32, math.floor(32 * (game.canvas.AbsoluteSize.Y / game.canvas.AbsoluteSize.X)))
+		game.screen = Screen.new(game, 32, math.floor((22 * (game.canvas.AbsoluteSize.Y / game.canvas.AbsoluteSize.X))) - 1)
 		game.running = false
 		game.localPlayer = LocalPlayer
 		game.inputHandler = InputHandler.new(game)
-		game.player = Player.new(game, game.level, 0, 0, game.inputHandler)		
+		game.player = Player.new(game, game.level, 5, 5, game.inputHandler)		
 		
 		game.tickCount = 0
 		game.frameCount = 0
@@ -83,7 +81,7 @@ do Game = {}
 			
 			wait(0)
 			
-			if (now - lastTimer >= 1 ) then				
+			if (now - lastTimer >= 1 ) then		
 				lastTimer = lastTimer + 1
 				print(frames .. " frames : " .. ticks .. " ticks")
 				print(#self.localPlayer.PlayerGui.Everest2DGame.Screen:GetChildren())
