@@ -23,7 +23,7 @@ do Game = {}
 		game.canvas.Name = "Everest2DGame"
 		
 		game.level = Level.TestLevel
-		
+	
 		game.screen = Screen.new(game, 32, math.floor((22 * (game.canvas.AbsoluteSize.Y / game.canvas.AbsoluteSize.X))) - 1)
 		game.running = false
 		game.localPlayer = LocalPlayer

@@ -55,10 +55,7 @@ do AnimatedTile = Extends(BasicTile)
 			
 		end)()
 		
-		self.instance = rendered
-		
-		
-		return self
+		return rendered
 	end
 	
 	

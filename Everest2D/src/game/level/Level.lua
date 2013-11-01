@@ -42,8 +42,8 @@ do Level = {}
 	
 	function Level:testRandomGenerate()
 
-		for x = 0, self.width do
-			for y = 0, self.height do
+		for x = 1, self.width do
+			for y = 1, self.height do
 				local rand = math.random(1, 30)
 				if rand == 10  and y > 2 then
 					self.tiles[x][y] = Tile.FLOWER1.id

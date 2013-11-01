@@ -35,10 +35,9 @@ do Tile = {}
 		rendered.Image = self.spriteSheet.url
 		rendered.ImageRectSize = self.spriteSheet.vector2Size
 		rendered.ImageRectOffset = self.spritePosVec
-		self.instance = rendered
 		
 		
-		return self
+		return rendered
 	end
 	
 	Import("BasicTile")
