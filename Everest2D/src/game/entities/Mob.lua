@@ -24,6 +24,16 @@ do Mob = Extends(Entity)
 		mob.frame.BackgroundTransparency = 1
 		mob.frame.ZIndex = 5
 		
+		mob.nameToolTip = Instance.new("TextLabel", mob.frame)
+		mob.nameToolTip.Text = name
+		mob.nameToolTip.Size = UDim2.new(1,0,0.3,0)
+		mob.nameToolTip.Position = UDim2.new(0,0,-0.5,0)
+		mob.nameToolTip.BackgroundTransparency = 0.9
+		mob.nameToolTip.BackgroundColor3 = Color3.new(0,0,0)
+		mob.nameToolTip.BorderSizePixel = 0
+		mob.nameToolTip.FontSize = "Size18"
+		mob.nameToolTip.ZIndex = 9
+		
 		return mob
 	end
 	
@@ -38,6 +48,7 @@ do Mob = Extends(Entity)
 		self.numSteps = self.numSteps + 1
 		
 		if not self:hasCollided(xa, ya) then
+		
 			if ya < 0 then self.movingDir = "NORTH" end
 			if ya > 0 then self.movingDir = "SOUTH" end
 			if xa < 0 then self.movingDir = "WEST" end

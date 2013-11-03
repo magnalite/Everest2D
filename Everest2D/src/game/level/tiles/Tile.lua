@@ -33,8 +33,8 @@ do Tile = {}
 		rendered.Size = UDim2.new(1.05 / screen.sizeX, 0, 1.05 / screen.sizeY, 0)
 		rendered.Position = UDim2.new(posX / screen.sizeX, 0, posY / screen.sizeY, 0)
 		rendered.Image = self.spriteSheet.url
-		rendered.ImageRectSize = self.spriteSheet.vector2Size
-		rendered.ImageRectOffset = self.spritePosVec
+		rendered.ImageRectSize = self.spriteSheet.vector2Size + Vector2.new(-2, -2)
+		rendered.ImageRectOffset = self.spritePosVec + Vector2.new(1,1)
 		
 		
 		return rendered

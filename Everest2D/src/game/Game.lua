@@ -15,20 +15,21 @@ do Game = {}
 		setmetatable(game, Game)
 		
 		Import("Screen")
-		Import("Level")
 		Import("InputHandler")
-		Import("Player")
 		
 		game.canvas = Instance.new("ScreenGui", LocalPlayer.PlayerGui)
 		game.canvas.Name = "Everest2DGame"
-		
-		game.level = Level.TestLevel
 	
 		game.screen = Screen.new(game, 32, math.floor((22 * (game.canvas.AbsoluteSize.Y / game.canvas.AbsoluteSize.X))) - 1)
 		game.running = false
 		game.localPlayer = LocalPlayer
 		game.inputHandler = InputHandler.new(game)
-		game.player = Player.new(game, game.level, 5, 5, game.inputHandler)		
+		
+		game.packetHandler = Workspace.PacketHandler
+		
+		function game.packetHandler.OnClientInvoke(data)
+			game:recievedPacket(data)		
+		end
 		
 		game.tickCount = 0
 		game.frameCount = 0
@@ -38,6 +39,7 @@ do Game = {}
 
 	function Game:start()
 		self.running = true
+		self:sendPacket({"LOGIN"})
 		
 		coroutine.wrap(function()
 			self:run()
@@ -83,8 +85,6 @@ do Game = {}
 			
 			if (now - lastTimer >= 1 ) then		
 				lastTimer = lastTimer + 1
-				print(frames .. " frames : " .. ticks .. " ticks")
-				print(#self.localPlayer.PlayerGui.Everest2DGame.Screen:GetChildren())
 				frames = 0
 				ticks = 0			
 			end
@@ -93,21 +93,56 @@ do Game = {}
 	
 	function Game:tick()
 		self.tickCount = self.tickCount + 1
-		self.level:tick()
+		
+		if self.player then
+			self.player.level:tick()
+		end
 		
 	end
 	
+	Import("Level")
+	Import("Player")
+	
+	
 	function Game:render()
 		self.frameCount = self.frameCount + 1
-		self.level:render()
-		self.screen:render(self.player.posX - (self.screen.sizeX / 2), self.player.posY - (self.screen.sizeY / 2))
+		
+		if self.player then
+			self.player.level:render()
+			self.screen:render(self.player.posX - (self.screen.sizeX / 2), self.player.posY - (self.screen.sizeY / 2))
+		end
 		
 	end
+	
+	function Game:recievedPacket(data)
+
+		if data[1] == "START" then
+			self.level = Level[data[2]]
+			self.player = Player.new(self, self.level, self.localPlayer.Name, data[3], data[4], self.inputHandler)
+		elseif data[1] == "SPAWN" then
+			if data[2] == "Player" then
+				Player.new(self, self.level, data[3], data[4], data[5], nil)
+			end
+		elseif data[1] == "PLAYERMOVE" then
+		
+			Player.players[data[2]]:move(data[3], data[4])
+		
+		end
+		
+	end
+	
+	function Game:sendPacket(data)
+		coroutine.wrap(function(data)
+			self.packetHandler:InvokeServer(data)
+		end)(data)
+	end
+	
 end
 
 do --MAIN
 	game.StarterGui:SetCoreGuiEnabled(2, false)
 	wait(5)
+	repeat wait() until Workspace:FindFirstChild("PacketHandler")
 	local game = Game.new()
 	game:start()
 end

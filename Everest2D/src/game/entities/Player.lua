@@ -11,17 +11,21 @@ do Player = Extends(Mob)
 		
 	Import("SpriteSheet")
 	
-	function Player.new(game, level, posX, posY, input)
-		local player = Mob.new(game, level, "Player", 0.2, posX, posY)
+	Player.players = {}
+	
+	function Player.new(game, level, name, posX, posY, input)
+		local player = Mob.new(game, level, name, 0.2, posX, posY)
 		setmetatable(player, Player)
 		
 		player.input = input	
 		player.scale = 2
 		player.game = game
-		player.frame.Name = "Player"
+		player.frame.Name = name
 		player.frame.Image = SpriteSheet.BasicSpriteSheet.url
 		player.frame.ImageRectSize = Vector2.new(32, 32)
 		player.frame.ImageRectOffset = Vector2.new(0, 128)
+		
+		Player.players[name] = player
 		
 		return player
 	end
@@ -30,21 +34,24 @@ do Player = Extends(Mob)
 		local xa = 0
 		local ya = 0
 		
-		if self.input.keys["w"] then
-			ya = ya - 1
-		end
-		if self.input.keys["s"] then
-			ya = ya + 1
-		end
-		if self.input.keys["a"] then
-			xa = xa - 1
-		end
-		if self.input.keys["d"] then
-			xa = xa + 1
+		if self.input then
+			if self.input.keys["w"] then
+				ya = ya - 1
+			end
+			if self.input.keys["s"] then
+				ya = ya + 1
+			end
+			if self.input.keys["a"] then
+				xa = xa - 1
+			end
+			if self.input.keys["d"] then
+				xa = xa + 1
+			end
 		end
 		
 		if xa ~= 0 or ya ~= 0 then
-			self:move(xa, ya)
+			--self:move(xa, ya)
+			self.game:sendPacket({"MOVE", xa, ya})
 			self.isMoving = true
 		else
 			self.isMoving = false

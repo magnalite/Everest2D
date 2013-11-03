@@ -45,12 +45,6 @@ do AnimatedTile = Extends(BasicTile)
 				lastFrameTick = screen.game.tickCount + self.delay
 				
 				rendered.ImageRectOffset = Vector2.new(self.spritePosVec.X + (currentFrame * self.spriteSheet.vector2Size.X), self.spritePosVec.Y)
-				--currentFrame = currentFrame + frameDir
-				
-				--if currentFrame <= 0 or currentFrame >= self.frames - 1 then
-					--frameDir = -frameDir
-				--end
-				
 			end
 			
 		end)()

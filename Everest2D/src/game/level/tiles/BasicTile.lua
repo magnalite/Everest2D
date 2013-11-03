@@ -19,9 +19,9 @@ do BasicTile = Extends(Tile)
 		basicTile.spriteSheet = spriteSheet
 		basicTile.spritePosX = spritePosX
 		basicTile.spritePosY = spritePosY
-		basicTile.spriteSizeX = spriteSheet.spriteSizeX-1
-		basicTile.spriteSizeY = spriteSheet.spriteSizeY-1	
-		basicTile.spritePosVec = Vector2.new(spritePosX-1, spritePosY-1)
+		basicTile.spriteSizeX = spriteSheet.spriteSizeX
+		basicTile.spriteSizeY = spriteSheet.spriteSizeY	
+		basicTile.spritePosVec = Vector2.new(spritePosX, spritePosY)
 		
 		return basicTile	
 	end	
