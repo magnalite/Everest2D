@@ -18,7 +18,7 @@ do Player = Extends(Mob)
 		setmetatable(player, Player)
 		
 		player.input = input	
-		player.scale = 2
+		player.scale = 6
 		player.game = game
 		player.frame.Name = name
 		player.frame.Image = SpriteSheet.BasicSpriteSheet.url
@@ -50,7 +50,7 @@ do Player = Extends(Mob)
 		end
 		
 		if xa ~= 0 or ya ~= 0 then
-			--self:move(xa, ya)
+			self:move(xa, ya)
 			self.game:sendPacket({"MOVE", xa, ya})
 			self.isMoving = true
 		else
