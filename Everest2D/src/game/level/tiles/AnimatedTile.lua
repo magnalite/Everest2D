@@ -27,8 +27,8 @@ do AnimatedTile = Extends(BasicTile)
 		local rendered = Instance.new("ImageLabel", screen.frame)
 		rendered.BorderSizePixel = 0
 		rendered.ZIndex = 2
-		rendered.Size = UDim2.new(1.05 / screen.sizeX, 0, 1.05 / screen.sizeY, 0)
-		rendered.Position = UDim2.new(posX / screen.sizeX, 0, posY / screen.sizeY, 0)
+		rendered.Size = UDim2.new(0, 32, 0, 32)
+		rendered.Position = UDim2.new(0, posX * 32, 0, posY * 32)
 		rendered.Image = self.spriteSheet.url
 		rendered.ImageRectSize = self.spriteSheet.vector2Size
 		

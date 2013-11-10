@@ -7,14 +7,16 @@ Import("Entity")
 
 do Mob = Extends(Entity)
 	_G.Mob = Mob
-	Mob.__index = Mob	
-	
-	function Mob.new(game, level, name, speed, posX, posY)
+	Mob.__index = Mob
+
+	function Mob.new(game, level, hp, name, speed, posX, posY, type)
 		local mob = Entity.new(level, posX, posY)
 		setmetatable(mob, Mob)
-		
+
 		mob.name = name
+		mob.hp = hp
 		mob.speed = speed
+		mob.type = type
 		mob.numSteps = 0
 		mob.isMoving = false
 		mob.movingDir = "SOUTH"
@@ -23,60 +25,59 @@ do Mob = Extends(Entity)
 		mob.frame.BorderSizePixel = 0
 		mob.frame.BackgroundTransparency = 1
 		mob.frame.ZIndex = 5
-		
+
 		mob.nameToolTip = Instance.new("TextLabel", mob.frame)
 		mob.nameToolTip.Text = name
 		mob.nameToolTip.Size = UDim2.new(1,0,0.3,0)
 		mob.nameToolTip.Position = UDim2.new(0,0,-0.5,0)
-		mob.nameToolTip.BackgroundTransparency = 0.9
-		mob.nameToolTip.BackgroundColor3 = Color3.new(0,0,0)
+		mob.nameToolTip.BackgroundTransparency = 1
 		mob.nameToolTip.BorderSizePixel = 0
 		mob.nameToolTip.FontSize = "Size18"
 		mob.nameToolTip.ZIndex = 9
-		
+
 		return mob
 	end
-	
-	function Mob:move(xa, ya)
+
+	function Mob:move(xa, ya, type)
 		if xa ~= 0 and ya ~= 0 then
-			self:move(xa / 2, 0)
-			self:move(0, ya / 2)
-			self.numSteps = self.numSteps - 1
-			return
-		end	
-		
+			xa = xa / 2
+			ya = ya / 2
+		end
+
 		self.numSteps = self.numSteps + 1
-		
+
 		if not self:hasCollided(xa, ya) then
-		
+
 			if ya < 0 then self.movingDir = "NORTH" end
 			if ya > 0 then self.movingDir = "SOUTH" end
 			if xa < 0 then self.movingDir = "WEST" end
 			if xa > 0 then self.movingDir = "EAST" end
-			
+
 			self.posX = math.min(self.posX + (xa * self.speed), self.level.width)
 			self.posX = math.max(self.posX, 0)
 			self.posY = math.min(self.posY + (ya * self.speed), self.level.height)
 			self.posY = math.max(self.posY, 0)
-			
+
 			self.currentTile = self.level.tiles[math.floor(self.posX + 0.5)][math.floor(self.posY + 0.5)]
-		end	
-		
+
+			return xa, ya
+		end
+
 	end
-	
+
 	function Mob:hasCollided()
 		error("Attempted to call hasCollided on native mob class.")
 	end
-	
+
 	Import("Tile")
-	
+
 	function Mob:isSolidTile(x, y, xa, ya)
-		
+
 		local x = math.max(0, math.floor(x + xa))
 		local x = math.min(self.level.width, x)
 		local y = math.max(0, math.floor(y + ya))
 		local y = math.min(self.level.height, y)
-		
+
 		local solid = false
 		if x == self.level.width or x == 0 or y == self.level.height or y == 0 then return true end
 		for xi = 0, math.ceil(self.scale) do
@@ -86,9 +87,9 @@ do Mob = Extends(Entity)
 			end
 		end
 		local nextTile = Tile.Tiles[self.level.tiles[x][y]]
-		
+
 		return solid
 
 	end
-	
+
 end

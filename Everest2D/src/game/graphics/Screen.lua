@@ -43,7 +43,7 @@ do Screen = {}
 		local posX = math.max(1, posX)
 		local posY = math.max(1, posY)
 
-		self.frame:TweenPosition(UDim2.new(-(posX / self.sizeX), 0, -(posY / self.sizeY), 0), "Out", "Linear", 0.2, true)
+		self.frame:TweenPosition(UDim2.new(0, -posX * 32, 0, -posY * 32), "Out", "Linear", 0.2, true)
 
 		local used = {}
 

@@ -13,12 +13,17 @@ do Player = Extends(Mob)
 	
 	Player.players = {}
 	
-	function Player.new(game, level, name, posX, posY, input)
-		local player = Mob.new(game, level, name, 0.2, posX, posY)
+	function Player.new(game, level, health, name, posX, posY, input)
+		local player = Mob.new(game, level, health, name, 0.2, posX, posY, "PLAYER")
 		setmetatable(player, Player)
 		
+		
+		if name == game.localPlayer.Name then
+			player.frame.ZIndex = 6
+		end
+		
 		player.input = input	
-		player.scale = 6
+		player.scale = 2
 		player.game = game
 		player.frame.Name = name
 		player.frame.Image = SpriteSheet.BasicSpriteSheet.url
@@ -50,9 +55,9 @@ do Player = Extends(Mob)
 		end
 		
 		if xa ~= 0 or ya ~= 0 then
-			self:move(xa, ya)
-			self.game:sendPacket({"MOVE", xa, ya})
+			xa, ya = self:move(xa, ya)
 			self.isMoving = true
+			self.game:sendPacket({"MOVE", xa, ya, self.speed})
 		else
 			self.isMoving = false
 		end
@@ -62,8 +67,8 @@ do Player = Extends(Mob)
 	function Player:render()
 		local animCycle = 2 - math.floor((self.numSteps * (self.speed * 5)) % 30 / 10)	
 			
-		self.frame:TweenSize(UDim2.new((1 * self.scale) / self.game.screen.sizeX, 0, (1 * self.scale) / self.game.screen.sizeY), "Out", "Linear", 0.2, true)
-		self.frame:TweenPosition(UDim2.new((self.posX) / self.game.screen.sizeX, 0, (self.posY) / self.game.screen.sizeY, 0), "Out", "Linear", 0.1, true)	
+		self.frame:TweenSize(UDim2.new(0, 32 * self.scale, 0, 32 * self.scale), "Out", "Linear", 0.2, true)
+		self.frame:TweenPosition(UDim2.new(0, self.posX * 32, 0, self.posY * 32), "Out", "Linear", 0.1, true)	
 		
 		if self.movingDir == "NORTH" then
 			self.frame.ImageRectOffset = Vector2.new(32 * animCycle, 225)
