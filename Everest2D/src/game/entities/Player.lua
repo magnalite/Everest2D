@@ -1,4 +1,7 @@
 --client
+
+--Player class, all players use this class
+
 repeat wait() until _G.Import
 _G.Import("Import")
 
@@ -56,8 +59,12 @@ do Player = Extends(Mob)
 		
 		if xa ~= 0 or ya ~= 0 then
 			xa, ya = self:move(xa, ya)
+			
+			xa = xa or 0
+			ya = ya or 0
+			
 			self.isMoving = true
-			self.game:sendPacket({"MOVE", xa, ya, self.speed})
+			self.game:sendPacket({"MOVE", xa, ya, self.speed, self.posX, self.posY})
 		else
 			self.isMoving = false
 		end
@@ -89,7 +96,6 @@ do Player = Extends(Mob)
 	end
 	
 	function Player:hasCollided(xa, ya)
-	
 		return self:isSolidTile(self.posX, self.posY, xa, ya)	
 	end
 	

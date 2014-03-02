@@ -1,4 +1,7 @@
 --client
+
+--Custom input handler for convenience
+
 repeat wait() until _G.Import
 _G.Import("Import")
 
@@ -13,6 +16,7 @@ do InputHandler = {}
 		inputHandler.keys = {}
 		inputHandler.mouse = game.localPlayer:GetMouse()		
 		
+		--Allows to easily see which keys are being held down
 		inputHandler.mouse.KeyDown:connect(function(key) inputHandler:keyDown(key) end)		
 		inputHandler.mouse.KeyUp:connect(function(key) inputHandler:keyUp(key) end)			
 		

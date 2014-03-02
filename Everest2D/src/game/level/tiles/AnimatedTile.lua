@@ -1,5 +1,7 @@
 --client
 
+--Standard tile but with an animated texture
+
 repeat wait() until _G.Import
 _G.Import("Import")
 
@@ -12,6 +14,8 @@ do AnimatedTile = Extends(BasicTile)
 	_G.AnimatedTile = AnimatedTile
 	AnimatedTile.__index = AnimatedTile
 	
+	--frames = total number of frames
+	--delay = time between the frames
 	function AnimatedTile.new(id, isWalkable, spriteSheet, spritePosX, spritePosY, frames, delay)
 		local animatedTile = BasicTile.new(id, isWalkable, spriteSheet, spritePosX, spritePosY)
 		setmetatable(animatedTile, AnimatedTile)
@@ -36,14 +40,16 @@ do AnimatedTile = Extends(BasicTile)
 		local frameDir = 1
 		local lastFrameTick = screen.game.tickCount
 		
+		--The loops which animates the tile
 		coroutine.wrap(function()
 		
 			while wait() do
-			
+				--Synced with games tickcount for synced animation with other tiles
 				currentFrame = math.floor(math.abs(math.sin(screen.game.tickCount / self.delay) * self.frames))
 				
 				lastFrameTick = screen.game.tickCount + self.delay
 				
+				--Gets the frames to the right of the spritePosX and spritePosY on the sprite required for the animation
 				rendered.ImageRectOffset = Vector2.new(self.spritePosVec.X + (currentFrame * self.spriteSheet.vector2Size.X), self.spritePosVec.Y)
 			end
 			

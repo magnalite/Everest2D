@@ -1,4 +1,7 @@
 --client
+
+--Base mob class, mobs should extend this class
+
 repeat wait() until _G.Import
 _G.Import("Import")
 
@@ -33,12 +36,21 @@ do Mob = Extends(Entity)
 		mob.nameToolTip.BackgroundTransparency = 1
 		mob.nameToolTip.BorderSizePixel = 0
 		mob.nameToolTip.FontSize = "Size18"
-		mob.nameToolTip.ZIndex = 9
+		mob.nameToolTip.ZIndex = 8
 
 		return mob
 	end
 
-	function Mob:move(xa, ya, type)
+	--xa is the distance across x it is moving
+	--xy is the same for the y axis
+	--type is the speed at which they move
+	--truePosX is for syncronisation with the server (forces the entity to that position)
+	--truePosY is the same but for the y axis
+	function Mob:move(xa, ya, type, truePosX, truePosY)
+	
+		self.posX = truePosX or self.posX
+		self.posY = truePosY or self.posY
+	
 		if xa ~= 0 and ya ~= 0 then
 			xa = xa / 2
 			ya = ya / 2
@@ -65,12 +77,15 @@ do Mob = Extends(Entity)
 
 	end
 
+	--Should be custom for every mob due to differing behavour
 	function Mob:hasCollided()
 		error("Attempted to call hasCollided on native mob class.")
 	end
 
 	Import("Tile")
 
+	--Find if the mob moving from x,y via xa ya will collide with a tile
+	--Factors in the scale of the mob
 	function Mob:isSolidTile(x, y, xa, ya)
 
 		local x = math.max(0, math.floor(x + xa))
@@ -79,7 +94,7 @@ do Mob = Extends(Entity)
 		local y = math.min(self.level.height, y)
 
 		local solid = false
-		if x == self.level.width or x == 0 or y == self.level.height or y == 0 then return true end
+		if x >= self.level.width - 1 or x <= 0 or y >= self.level.height - 1 or y <= 0 then return true end
 		for xi = 0, math.ceil(self.scale) do
 			for yi = 0, math.ceil(self.scale) do
 				local nextTile = Tile.Tiles[self.level.tiles[x + xi][y + yi]]

@@ -1,5 +1,7 @@
 --client
 
+--Basic general purpose tile
+
 repeat wait() until _G.Import
 _G.Import("Import")
 

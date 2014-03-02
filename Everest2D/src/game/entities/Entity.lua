@@ -1,4 +1,7 @@
 --client
+
+--Base entity class, should not really be used for anything other than setting up other classes
+
 repeat wait() until _G.Import
 _G.Import("Import")
 
@@ -24,7 +27,16 @@ do Entity = {}
 	end
 	
 	function Entity:render()
+		--Entities should have their own render function to stop graphical glitches
 		error("Attempted to render base entity")
 	end	
+	
+	function Entity:Destroy()
+		self.level.entities[self.levelId] = nil
+		if self.frame then
+			self.frame:Destroy()
+		end
+		self = nil
+	end
 	
 end

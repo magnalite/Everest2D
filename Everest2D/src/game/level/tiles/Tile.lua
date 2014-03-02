@@ -1,4 +1,7 @@
 --client
+
+--Base tile, extend to make new tile types
+
 repeat wait() until _G.Import
 _G.Import("Import")
 
@@ -44,6 +47,8 @@ do Tile = {}
 	Import("AnimatedTile")
 	Import("SpriteSheet")
 	
+	--All tile types are declared here
+	--id, walkable, spritesheet, spritesheetposition
 	Tile.GRASS = BasicTile.new(1, true, SpriteSheet.BasicSpriteSheet, 0, 0)
 	Tile.FLOWER1 = BasicTile.new(2, true, SpriteSheet.BasicSpriteSheet, 32, 0)
 	Tile.FLOWER2 = BasicTile.new(3, true, SpriteSheet.BasicSpriteSheet, 64, 0)

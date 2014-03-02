@@ -1,4 +1,7 @@
 --client
+
+--Used to create the maps, extend this to make new ones
+
 repeat wait() until _G.Import
 _G.Import("Import")
 
@@ -25,8 +28,6 @@ do Level = {}
 		return level
 	end
 	
-	Import("Tile")	
-	
 	function Level:tick()
 		for _, entity in pairs(self.entities) do
 			entity:tick()
@@ -41,7 +42,11 @@ do Level = {}
 	end
 	
 	function Level:testRandomGenerate()
-
+		
+		Import("Tile")	
+		
+		repeat wait() until Tile.GRASS
+		
 		for x = 1, self.width do
 			for y = 1, self.height do
 				local rand = math.random(1, 30)

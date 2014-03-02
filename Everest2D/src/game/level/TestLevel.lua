@@ -1,10 +1,15 @@
 --client
+
+--A test map
+
 repeat wait() until _G.Import
 _G.Import("Import")
 
 Import("Level")
 
 local levelData = {}
+
+--Example data structure
 
 levelData[1]  = {4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4}
 levelData[2]  = {4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,4}
@@ -41,5 +46,6 @@ levelData[32] = {4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4
 
 
 Level.TestLevel = Level.new(32,32, levelData)
+
 
 Level.ready = true
