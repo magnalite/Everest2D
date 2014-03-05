@@ -63,8 +63,13 @@ do Screen = {}
 		while not self.game.level.ready and not #Tile.Tiles > 0 do wait() end
 		
 		--Stops the screen from moving over the edge of the map
+<<<<<<< HEAD
+		posX = math.min(self.game.level.width - 1 - (self.sizeX), posX)
+		posY = math.min(self.game.level.height - 1 - (self.sizeY), posY)
+=======
 		posX = math.min(self.game.level.width - 1 - (self.sizeX / 2), posX)
 		posY = math.min(self.game.level.height - 1 - (self.sizeY / 2), posY)
+>>>>>>> refs/remotes/origin/master
 		posX = math.max(1, posX)
 		posY = math.max(1, posY)
 		

@@ -44,7 +44,11 @@ do Mob = Extends(Entity)
 	--xa is the distance across x it is moving
 	--xy is the same for the y axis
 	--type is the speed at which they move
+<<<<<<< HEAD
+	--truePosX is for synchronisation with the server (forces the entity to that position)
+=======
 	--truePosX is for syncronisation with the server (forces the entity to that position)
+>>>>>>> refs/remotes/origin/master
 	--truePosY is the same but for the y axis
 	function Mob:move(xa, ya, type, truePosX, truePosY)
 	

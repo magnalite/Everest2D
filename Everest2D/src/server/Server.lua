@@ -9,6 +9,23 @@ do Server = {}
 	_G.Server = Server
 	Server.__index = Server
 
+<<<<<<< HEAD
+
+	Import("ServerPacketHandler")
+	function Server.new()
+		print("!!!SERVER INITIALISING!!!")
+		local server = {}
+		setmetatable(server, Server)
+
+		_G.localserver = server
+		server.packetHandler = ServerPacketHandler.new(server)
+		server.players = {}
+		server.playersLastConnect = {}
+
+		return server
+	end
+
+=======
 	function Server.new()
 		print("!!!SERVER INITIALISING!!!")
 		local server = {}
@@ -95,4 +112,5 @@ do Server = {}
 	end
 	
 	
+>>>>>>> refs/remotes/origin/master
 end

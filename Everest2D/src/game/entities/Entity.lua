@@ -16,6 +16,10 @@ do Entity = {}
 		entity.level = level
 		table.insert(level.entities, entity)
 		entity.levelId = #level.entities
+<<<<<<< HEAD
+		print(entity.levelId)
+=======
+>>>>>>> refs/remotes/origin/master
 		entity.posX = posX
 		entity.posY = posY
 		

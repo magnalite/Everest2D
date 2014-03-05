@@ -17,6 +17,58 @@ do Player = Extends(Mob)
 	Player.players = {}
 	
 	function Player.new(game, level, health, name, posX, posY, input)
+<<<<<<< HEAD
+		local player = Mob.new(game, level, health, name, 0.4, posX, posY, "PLAYER")
+		setmetatable(player, Player)
+		
+		
+		if name == game.localPlayer.Name then
+			player.frame.ZIndex = 6
+		end
+		
+		player.input = input	
+		player.scale = 2
+		player.game = game
+		player.frame.Name = name
+		player.frame.Image = SpriteSheet.BasicSpriteSheet.url
+		player.frame.ImageRectSize = Vector2.new(32, 32)
+		player.frame.ImageRectOffset = Vector2.new(0, 128)
+		
+		Player.players[name] = player
+		
+		return player
+	end
+	
+	Import("CLIENT_PACKET002_MOVE")
+	
+	function Player:tick()
+		local xa = 0
+		local ya = 0
+		
+		if self.input then
+			if self.input.keys["w"] then
+				ya = ya - 1
+			end
+			if self.input.keys["s"] then
+				ya = ya + 1
+			end
+			if self.input.keys["a"] then
+				xa = xa - 1
+			end
+			if self.input.keys["d"] then
+				xa = xa + 1
+			end
+		end
+		
+		if xa ~= 0 or ya ~= 0 then
+			xa, ya = self:move(xa, ya)
+			
+			xa = xa or 0
+			ya = ya or 0
+			
+			self.isMoving = true
+			self.game.packetHandler:sendPacket(CLIENT_PACKET002_MOVE.new(self.levelId, xa, ya, self.speed, self.posX, self.posY):Data())
+=======
 		local player = Mob.new(game, level, health, name, 0.2, posX, posY, "PLAYER")
 		setmetatable(player, Player)
 		
@@ -65,6 +117,7 @@ do Player = Extends(Mob)
 			
 			self.isMoving = true
 			self.game:sendPacket({"MOVE", xa, ya, self.speed, self.posX, self.posY})
+>>>>>>> refs/remotes/origin/master
 		else
 			self.isMoving = false
 		end
