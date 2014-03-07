@@ -1,5 +1,3 @@
---client
-
 --Base tile, extend to make new tile types
 
 repeat wait() until _G.Import

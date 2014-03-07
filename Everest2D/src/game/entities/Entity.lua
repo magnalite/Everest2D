@@ -1,5 +1,3 @@
---client
-
 --Base entity class, should not really be used for anything other than setting up other classes
 
 repeat wait() until _G.Import
@@ -16,10 +14,7 @@ do Entity = {}
 		entity.level = level
 		table.insert(level.entities, entity)
 		entity.levelId = #level.entities
-<<<<<<< HEAD
 		print(entity.levelId)
-=======
->>>>>>> refs/remotes/origin/master
 		entity.posX = posX
 		entity.posY = posY
 		

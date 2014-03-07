@@ -1,5 +1,3 @@
---client
-
 --Custom input handler for convenience
 
 repeat wait() until _G.Import

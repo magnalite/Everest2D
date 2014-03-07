@@ -1,5 +1,3 @@
---client
-
 --Simplified images
 
 repeat wait() until _G.Import

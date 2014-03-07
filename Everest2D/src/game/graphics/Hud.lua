@@ -1,5 +1,3 @@
---client
-
 --Heads up display
 
 repeat wait() until _G.Import

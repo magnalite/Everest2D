@@ -1,5 +1,3 @@
---client
-
 --Standard tile but with an animated texture
 
 repeat wait() until _G.Import
