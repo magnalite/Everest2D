@@ -50,6 +50,19 @@ do Level = {}
 	
 	Import("Tile")
 	
+	function Level:rayCast(pos, dirVec)
+		for i = 1, 30 do
+			local id = self.tiles[math.floor(pos.X + dirVec.X * i)] and self.tiles[math.floor(pos.X + dirVec.X * i)][math.floor(pos.Y + dirVec.Y * i)]
+			if id then
+				local tile = Tile.Tiles[id]
+				if not tile.isWalkable then 
+					return Vector2.new(pos.X + math.floor(dirVec.X * i), pos.Y + math.floor(dirVec.Y * i)) + Vector2.new(0.5,0.5) - dirVec
+				end
+			end
+		end
+		return pos + dirVec * 30
+	end
+	
 	function Level:testRandomGenerate()
 		
 		repeat wait() until Tile.GRASS
@@ -62,8 +75,8 @@ do Level = {}
 					self.tiles[x][y] = Tile.FLOWER1.id
 				elseif rand == 20 and y > 2 then
 					self.tiles[x][y] = Tile.FLOWER2.id
-				elseif rand == 25 and y > 2 then
-					self.tiles[x][y] = Tile.GRASS.id
+				elseif rand == 28 and y > 2 then
+					self.tiles[x][y] = Tile.STONE.id
 				else
 					self.tiles[x][y] = Tile.GRASS.id
 				end

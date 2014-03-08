@@ -14,8 +14,8 @@ do Player = Extends(Mob)
 	
 	Player.players = {}
 	
-	function Player.new(game, level, health, name, posX, posY, input)
-		local player = Mob.new(game, level, health, name, 1, posX, posY, "PLAYER")
+	function Player.new(id, game, level, health, name, posX, posY, input)
+		local player = Mob.new(id, game, level, health, name, 1, posX, posY, "PLAYER")
 		setmetatable(player, Player)
 		
 		
@@ -37,6 +37,8 @@ do Player = Extends(Mob)
 	end
 	
 	Import("CLIENT_PACKET002_MOVE")
+	Import("CLIENT_PACKET004_SPAWNEFFECT")
+	Import("BasicMissile")
 	
 	function Player:tick()
 		local xa = 0
@@ -54,6 +56,12 @@ do Player = Extends(Mob)
 			end
 			if self.input.keys["d"] then
 				xa = xa + 1
+			end
+			if self.input.keys["Button1"] then
+				local mousePos = Vector2.new((self.input.mouse.X + _G.localgame.screen.posX * 32)/32, (self.input.mouse.Y + _G.localgame.screen.posY * 32)/32)
+				local dirVec = (mousePos - Vector2.new(self.posX, self.posY)).unit
+				local missile = BasicMissile.new(#self.level.entities + 1, self.level, 3, self.posX, self.posY, "BasicMissile", dirVec, UDim2.new(0, 10, 0, 10), Color3.new(255/255,50/255,50/255))
+				self.game.packetHandler:sendPacket(CLIENT_PACKET004_SPAWNEFFECT.new(#self.level.entities + 1, self.level, 3, self.posX, self.posY, "BasicMissile", dirVec, UDim2.new(0, 10, 0, 10), Color3.new(255/255,50/255,50/255)):Data())
 			end
 		end
 		

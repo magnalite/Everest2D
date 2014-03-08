@@ -7,14 +7,18 @@ do Entity = {}
 	_G.Entity = Entity
 	Entity.__index = Entity
 	
-	function Entity.new(level, posX, posY)
+	function Entity.new(id, level, posX, posY)
 		entity = {}
 		setmetatable(entity, Entity)
 		
 		entity.level = level
-		table.insert(level.entities, entity)
-		entity.levelId = #level.entities
-		print(entity.levelId)
+		if id then
+			level.entities[id] = entity
+			entity.levelId = id
+		else
+			table.insert(level.entities, entity)
+			entity.levelId = #level.entities
+		end
 		entity.posX = posX
 		entity.posY = posY
 		
@@ -26,7 +30,7 @@ do Entity = {}
 	end
 	
 	function Entity:render()
-		--Entities should have their own render function to stop graphical glitches
+		--Entities should have their own render function due to graphical diversity
 		error("Attempted to render base entity")
 	end	
 	

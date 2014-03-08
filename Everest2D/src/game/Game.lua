@@ -68,9 +68,6 @@ do Game = {}
 
 		if not _G.isServer then
 			self.packetHandler:sendPacket(CLIENT_PACKET001_LOGIN.new():Data())
-			--coroutine.wrap(function()  --Stops client from being disconnected due to lost connection
-				--while wait(5) do self.packetHandler:sendPacket({"KEEPCONNECTION"}) end
-			--end)()
 		end
 
 		coroutine.wrap(function()
@@ -137,7 +134,7 @@ do Game = {}
 			
 			self:tick()
 			self:render()
-			wait(1/10)
+			wait(1/20)
 			lasttick = tick()
 		end
 	end
@@ -167,6 +164,7 @@ end
 Import("Server")
 
 do --MAIN
+	wait(2)
 	if script.Parent.Parent.Name == "Everest2DServer" then
 		Server.new()
 		_G.isServer = true

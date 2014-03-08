@@ -105,6 +105,7 @@ do Screen = {}
 				if not used[x] then
 					for y, tile in pairs(ytab) do
 						tile:Destroy()
+						self.rendered[x][y] = nil
 					end
 					self.rendered[x] = nil
 					break

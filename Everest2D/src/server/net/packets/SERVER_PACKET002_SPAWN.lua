@@ -27,8 +27,7 @@ do SERVER_PACKET002_SPAWN = {}
 	
 	function SERVER_PACKET002_SPAWN.Handle(data)
 		if data[2] == "Player" then
-			p = Player.new(_G.localgame, _G.localgame.level, 100, data[3], data[4], data[5], nil)
-			p.levelId = data[6]
+			p = Player.new(data[6], _G.localgame, _G.localgame.level, 100, data[3], data[4], data[5], nil)
 		end
 	end
 end

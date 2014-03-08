@@ -31,10 +31,7 @@ do SERVER_PACKET001_START = {}
 	
 		_G.localgame.level = Level.allLevels[data[2]]
 		repeat wait(1) until _G.localgame.level.ready
-		_G.localgame.player = Player.new(_G.localgame, _G.localgame.level, 100, _G.localgame.localPlayer.Name, data[3], data[4], _G.localgame.inputHandler)
-		_G.localgame.level.entities[_G.localgame.player.levelId] = nil
-		_G.localgame.player.levelId = data[5]
-		_G.localgame.level.entities[data[5]] = _G.localgame.player
+		_G.localgame.player = Player.new(data[5], _G.localgame, _G.localgame.level, 100, _G.localgame.localPlayer.Name, data[3], data[4], _G.localgame.inputHandler)
 		
 	end
 end

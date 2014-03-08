@@ -10,8 +10,8 @@ do Mob = Extends(Entity)
 	_G.Mob = Mob
 	Mob.__index = Mob
 
-	function Mob.new(game, level, hp, name, speed, posX, posY, type)
-		local mob = Entity.new(level, posX, posY)
+	function Mob.new(id, game, level, hp, name, speed, posX, posY, type)
+		local mob = Entity.new(id, level, posX, posY)
 		setmetatable(mob, Mob)
 
 		mob.name = name
@@ -28,7 +28,7 @@ do Mob = Extends(Entity)
 		mob.frame.ZIndex = 5
 
 		mob.nameToolTip = Instance.new("TextLabel", mob.frame)
-		mob.nameToolTip.Text = name
+		mob.nameToolTip.Text = name .. ":" .. mob.levelId
 		mob.nameToolTip.Size = UDim2.new(1,0,0.3,0)
 		mob.nameToolTip.Position = UDim2.new(0,0,-0.5,0)
 		mob.nameToolTip.BackgroundTransparency = 1

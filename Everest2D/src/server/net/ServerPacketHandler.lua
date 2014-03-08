@@ -23,7 +23,9 @@ do ServerPacketHandler = {}
 	end
 	
 	function ServerPacketHandler:sendPacket(player, data)
-		print(tick() .. ": Server sending packet " .. table.concat(data, " ") .. " to player " .. player.Name)
+		local stringData = ""
+		for _, v in pairs(data) do stringData = stringData .. " " .. tostring(v) end
+		print(tick() .. ": Server sending packet " .. stringData .. " to player " .. player.Name)
 		coroutine.wrap(function(player, data)
 			self.handle:InvokeClient(player, data)
 		end)(player, data)
@@ -32,8 +34,11 @@ do ServerPacketHandler = {}
 	Import("CLIENT_PACKET001_LOGIN")
 	Import("CLIENT_PACKET002_MOVE")
 	Import("CLIENT_PACKET003_KEEPCONNECTION")
+	Import("CLIENT_PACKET004_SPAWNEFFECT")
 	function ServerPacketHandler:receivedPacket(player, data)
-		print(tick() .. ": Server received packet " .. table.concat(data, " ") .. " from player " .. player.Name)
+		local stringData = ""
+		for _, v in pairs(data) do stringData = stringData .. " " .. tostring(v) end
+		print(tick() .. ": Server received packet " .. stringData .. " from player " .. player.Name)
 		getfenv()[data[1]].Handle(player, data)
 	end
 	
