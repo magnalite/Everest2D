@@ -105,8 +105,8 @@ do Game = {}
 		local lasttick = tick()
 		--The game cycle (calls everything)
 		
-		
-		while (self.running) do
+		_G.rbxGame:GetService("RunService").RenderStepped:connect(function()
+		--while (self.running) do
 			--[[local now = tick()
 			unProcessedTime = unProcessedTime + ((now - lastTime) / minTimePerTick)
 			unRenderedTime = unRenderedTime + ((now - lastTime) / minTimePerFrame)
@@ -132,29 +132,29 @@ do Game = {}
 				ticks = 0
 			end]]--
 			
-			self:tick()
-			self:render()
-			wait(1/20)
+			self.deltaTime = tick() - lasttick
+			self:tick(self.deltaTime)
+			self:render(self.deltaTime)
 			lasttick = tick()
-		end
+		end)
 	end
 
-	function Game:tick()
+	function Game:tick(deltaTime)
 		self.tickCount = self.tickCount + 1
 
 		if self.player then
-			self.player.level:tick()
+			self.player.level:tick(deltaTime)
 		end
 
 	end
 	
-	function Game:render()
+	function Game:render(deltaTime)
 		if not _G.isServer then
 			self.frameCount = self.frameCount + 1
 
 			if self.player then
-				self.player.level:render()
-				self.screen:render(self.player.posX - (self.screen.sizeX / 2), self.player.posY - (self.screen.sizeY / 2))
+				self.player.level:render(deltaTime)
+				self.screen:render(deltaTime, self.player.posX - (self.screen.sizeX / 2), self.player.posY - (self.screen.sizeY / 2))
 			end
 		end
 	end

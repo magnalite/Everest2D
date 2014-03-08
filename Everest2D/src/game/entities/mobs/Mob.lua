@@ -50,8 +50,8 @@ do Mob = Extends(Entity)
 		self.posY = truePosY or self.posY
 	
 		if xa ~= 0 and ya ~= 0 then
-			xa = xa / 2
-			ya = ya / 2
+			xa = xa * math.cos(45)
+			ya = ya * math.cos(45)
 		end
 
 		self.numSteps = self.numSteps + 1

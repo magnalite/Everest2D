@@ -38,9 +38,9 @@ do Level = {}
 		
 	end	
 	
-	function Level:render()
+	function Level:render(deltaTime)
 		for _, entity in pairs(self.entities) do
-			entity:render()
+			entity:render(deltaTime)
 		end
 	end
 	
@@ -76,7 +76,7 @@ do Level = {}
 				elseif rand == 20 and y > 2 then
 					self.tiles[x][y] = Tile.FLOWER2.id
 				elseif rand == 28 and y > 2 then
-					self.tiles[x][y] = Tile.STONE.id
+					self.tiles[x][y] = Tile.GRASS.id
 				else
 					self.tiles[x][y] = Tile.GRASS.id
 				end

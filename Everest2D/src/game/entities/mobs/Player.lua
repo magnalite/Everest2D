@@ -15,7 +15,7 @@ do Player = Extends(Mob)
 	Player.players = {}
 	
 	function Player.new(id, game, level, health, name, posX, posY, input)
-		local player = Mob.new(id, game, level, health, name, 1, posX, posY, "PLAYER")
+		local player = Mob.new(id, game, level, health, name, 0.3		, posX, posY, "PLAYER")
 		setmetatable(player, Player)
 		
 		
@@ -79,11 +79,18 @@ do Player = Extends(Mob)
 		
 	end	
 	
-	function Player:render()
+	function Player:render(deltaTime)
 		local animCycle = 2 - math.floor((self.numSteps * (self.speed * 5)) % 30 / 10)	
-			
+		
+		
+		local posVec = Vector2.new(self.posX * 32, self.posY * 32)
+		local currentPosVec = Vector2.new(self.frame.AbsolutePosition.X, self.frame.AbsolutePosition.Y)
+		
+		local newPos = currentPosVec:lerp(posVec, 8 * deltaTime)
+		
+		self.frame.Position = UDim2.new(0, posVec.X, 0, posVec.Y)
+		
 		self.frame:TweenSize(UDim2.new(0, 32 * self.scale, 0, 32 * self.scale), "Out", "Linear", 0.2, true)
-		self.frame:TweenPosition(UDim2.new(0, self.posX * 32, 0, self.posY * 32), "Out", "Linear", 0.1, true)	
 		
 		if self.movingDir == "NORTH" then
 			self.frame.ImageRectOffset = Vector2.new(32 * animCycle, 225)

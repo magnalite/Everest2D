@@ -37,7 +37,7 @@ do Screen = {}
 		--Gets the players mouse position and translates it to world coords
 		if not _G.isServer then
 			_G.rbxGame:GetService("RunService").RenderStepped:connect(function()
-				screen.testFrame:TweenPosition(UDim2.new(0, game.inputHandler.mouse.X + screen.posX * 32, 0, game.inputHandler.mouse.Y + screen.posY * 32), "Out", "Linear", 0.1, true)
+				screen.testFrame.Position = UDim2.new(0, game.inputHandler.mouse.X + screen.posX * 32, 0, game.inputHandler.mouse.Y + screen.posY * 32)
 			end)
 		end
 		
@@ -55,7 +55,7 @@ do Screen = {}
 	Import("Tile")
 
 	--Warning dense code ahead!
-	function Screen:render(posX, posY)
+	function Screen:render(deltaTime, posX, posY)
 
 		--Waits for the level to load itself
 		while not self.game.level.ready and not #Tile.Tiles > 0 do wait() end
@@ -69,7 +69,12 @@ do Screen = {}
 		self.posX = posX
 		self.posY = posY
 		
-		self.frame:TweenPosition(UDim2.new(0, -posX * 32, 0, -posY * 32), "Out", "Linear", 0.2, true)
+		local posVec = Vector2.new(-posX * 32, -posY * 32)
+		local currentPosVec = Vector2.new(self.frame.AbsolutePosition.X, self.frame.AbsolutePosition.Y)
+		
+		local newPos = currentPosVec:lerp(posVec, 8 * deltaTime)
+		
+		self.frame.Position = UDim2.new(0, newPos.X, 0, newPos.Y)
 
 		local used = {}
 		
@@ -108,10 +113,12 @@ do Screen = {}
 						self.rendered[x][y] = nil
 					end
 					self.rendered[x] = nil
+					used[x] = nil
 					break
 				elseif not used[x][y] then
 					tile:Destroy()
 					self.rendered[x][y] = nil
+					used[x][y] = nil
 				end
 			end
 		end
