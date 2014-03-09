@@ -1,139 +1,91 @@
 require("LuaXML")
 local lfs = require("lfs")
+local json = require("json")
 
-local a = xml.load(".buildpath"):find("buildpathentry")
+local projdata = xml.load(".buildpath"):find("buildpathentry")
 local projname = xml.load(".project"):find("name")[1]
 local result = xml.new("roblox") do
-        result["xmlns:xmime"]="http://www.w3.org/2005/05/xmlmime"
-        result["version"]="4"
-        result["xsi:noNameSpaceSchemaLocation"]="http://www.roblox.com/roblox.xsd"
-        result["xmlns:xsi"]="http://www.w3.org/2001/XMLSchema-instance"
+	result["xmlns:xmime"]="http://www.w3.org/2005/05/xmlmime"
+	result["version"]="4"
+	result["xsi:noNameSpaceSchemaLocation"]="http://www.roblox.com/roblox.xsd"
+	result["xmlns:xsi"]="http://www.w3.org/2001/XMLSchema-instance"
 end
 
 local ignore = { }
-if a["excluding"] then
-        for file in a["excluding"]:gmatch("[^|]+") do
-                local f = ".\\"..a["path"].."\\"..file:gsub("/", "\\")
-                ignore[f] = true
-                print("ignore:", f)
-        end
-end        
-
-function browse(parent)
-        local ret = { }
-        for file in lfs.dir(parent) do
-                if file ~= "." and file ~= ".." then
-                        if lfs.attributes(parent.."\\"..file, "mode") == "directory" then
-                                ret[file] = browse(parent.."\\"..file)
-                        else
-                                if not ignore[parent.."\\"..file] then
-                                        table.insert(ret, parent.."\\"..file)
-                                end
-                        end
-                end
-        end
-        return ret
-end
-local p3
-local parent = (".\\"..a["path"])
-local toexport = browse(parent)
-local p1 = result:append("Item")
-p1["class"]="StringValue"
-p1["referent"]="RBX0"
-local p2 = p1:append("Properties")
-p2:append("string")["name"]="Name";p2:find("string", "name", "Name")[1]=projname
-p2:append("string")["name"]="Value";p2:find("string", "name", "Value")[1]=""
-local level = { }
-
-function export(from, lvl)
-        for file, data in pairs(from) do
-                if type(data) == "table" then
-                        p3 = (level[lvl-1] or p1):append("Item")
-                        p3["class"]="StringValue"
-                        p3["referent"]="RBX0"
-                        local p4 = p3:append("Properties")
-                        p4:append("string")["name"]="Name";p4:find("string", "name", "Name")[1]=file
-                        p4:append("string")["name"]="Value";p4:find("string", "name", "Value")[1]=""
-                        table.insert(level, p3)
-                        export(data, lvl+1)
-                else
-                        local read = io.open(data, "r")
-                        local sType = read:read()
-                        local item = (p3 or p1):append("Item")
-                        item["class"]="LocalScript"
-                        item["referent"]="RBX0"
-                        local props = item:append("Properties")
-                        props:append("string")["name"]="Name";props:find("string", "name", "Name")[1]=(string.gmatch(data:sub(2), ".+\\(.+)")())
-                        props:append("ProtectedString")["name"]="Source";props:find("ProtectedString", "name", "Source")[1]=read:read("*a")
-                        props:append("Content")["name"]="LinkedSource";props:find("Content", "name", "LinkedSource")[1]="null"
-                        props:append("bool")["name"]="Disabled";props:find("bool", "name", "Disabled")[1]="false"
-                end
-        end
+if projdata["excluding"] then
+	for file in projdata["excluding"]:gmatch("[^|]+") do
+		local f = projdata["path"].."/"..file
+		ignore[f] = true
+		print("ignoring:", f)
+	end
 end
 
-export(toexport, 1)
-
-local ignore = { }
-if a["excluding"] then
-        for file in a["excluding"]:gmatch("[^|]+") do
-                local f = ".\\"..a["path"].."\\"..file:gsub("/", "\\")
-                ignore[f] = true
-                print("ignore:", f)
-        end
-end        
-
-function browse(parent)
-        local ret = { }
-        for file in lfs.dir(parent) do
-                if file ~= "." and file ~= ".." then
-                        if lfs.attributes(parent.."\\"..file, "mode") == "directory" then
-                                ret[file] = browse(parent.."\\"..file)
-                        else
-                                if not ignore[parent.."\\"..file] then
-                                        table.insert(ret, parent.."\\"..file)
-                                end
-                        end
-                end
-        end
-        return ret
-end
-local p3
-local parent = (".\\"..a["path"])
-local toexport = browse(parent)
-local p1 = result:append("Item")
-p1["class"]="StringValue"
-p1["referent"]="RBX0"
-local p2 = p1:append("Properties")
-p2:append("string")["name"]="Name";p2:find("string", "name", "Name")[1]=projname.."Server"
-p2:append("string")["name"]="Value";p2:find("string", "name", "Value")[1]=""
-local level = { }
-
-function export(from, lvl)
-        for file, data in pairs(from) do
-                if type(data) == "table" then
-                        p3 = (level[lvl-1] or p1):append("Item")
-                        p3["class"]="StringValue"
-                        p3["referent"]="RBX0"
-                        local p4 = p3:append("Properties")
-                        p4:append("string")["name"]="Name";p4:find("string", "name", "Name")[1]=file
-                        p4:append("string")["name"]="Value";p4:find("string", "name", "Value")[1]=""
-                        table.insert(level, p3)
-                        export(data, lvl+1)
-                else
-                        local read = io.open(data, "r")
-                        local sType = read:read()
-                        local item = (p3 or p1):append("Item")
-                        item["class"]="Script"
-                        item["referent"]="RBX0"
-                        local props = item:append("Properties")
-                        props:append("string")["name"]="Name";props:find("string", "name", "Name")[1]=(string.gmatch(data:sub(2), ".+\\(.+)")())
-                        props:append("ProtectedString")["name"]="Source";props:find("ProtectedString", "name", "Source")[1]=read:read("*a")
-                        props:append("Content")["name"]="LinkedSource";props:find("Content", "name", "LinkedSource")[1]="null"
-                        props:append("bool")["name"]="Disabled";props:find("bool", "name", "Disabled")[1]="false"
-                end
-        end
+function browse(parent, indent)
+	local ret = { }
+	for file in lfs.dir(parent) do
+		if file ~= "." and file ~= ".." then
+			--print(indent, file, lfs.attributes(parent.."/"..file, "mode"))
+			if lfs.attributes(parent.."/"..file, "mode") == "directory" then
+				ret[file] = browse(parent.."/"..file, indent.."	")
+				--print(indent.."	", ret[file])
+			else
+				if not ignore[parent.."/"..file] then
+					ret[file] = "./"..parent.."/"..file
+					--print(indent, ret[file])
+				end
+			end
+		end
+	end
+	return ret
 end
 
-export(toexport, 1)
-print(result)
+--print("Project path:")
+local project = browse(projdata['path'], "")
+
+function instancify(mode, from, to)
+	for name, v in pairs(from) do
+		print(name, v)
+		if type(v) == "table" then
+			local dir = to:append("Item")
+			dir["class"]="StringValue"
+			dir["referent"]="RBX0"
+			local props = dir:append("Properties")
+			props:append("string")["name"]="Name";props:find("string", "name", "Name")[1]=name
+			props:append("string")["name"]="Value";props:find("string", "name", "Value")[1]=""
+			
+			instancify(mode, v, dir)
+		else
+			local data = io.open(v, "r"):read("*a")
+			item = to:append("Item")
+			item["class"] = mode.."Script"
+			item["referent"] = "RBX0"
+			local props = item:append("Properties")
+			props:append("string")["name"]="Name";props:find("string", "name", "Name")[1]=name
+			props:append("ProtectedString")["name"]="Source";props:find("ProtectedString", "name", "Source")[1]=data
+			props:append("Content")["name"]="LinkedSource";props:find("Content", "name", "LinkedSource")[1]="null"
+			props:append("bool")["name"]="Disabled";props:find("bool", "name", "Disabled")[1]="false"
+		end
+	end
+end
+
+local client = result:append("Item") do
+	client["class"]="StringValue"
+	client["referent"]="RBX0"
+	local props = client:append("Properties")
+	props:append("string")["name"]="Name";props:find("string", "name", "Name")[1] = projname.."Client"
+	props:append("string")["name"]="Value";props:find("string", "name", "Value")[1] = ""
+end
+
+local server = result:append("Item") do
+	server["class"]="StringValue"
+	server["referent"]="RBX0"
+	local props = server:append("Properties")
+	props:append("string")["name"]="Name";props:find("string", "name", "Name")[1] = projname.."Server"
+	props:append("string")["name"]="Value";props:find("string", "name", "Value")[1] = ""
+end
+
+instancify("Local", project, client)
+instancify("", project, server)
+
 io.open("ver-"..os.time()..".rbxm", "w"):write(tostring(result))
+print("Completed!")
