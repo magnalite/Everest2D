@@ -3,9 +3,9 @@
 repeat wait() until _G.Import
 _G.Import("Import")
 
-do CLIENT_PACKET004_SPAWNEFFECT = {}
-	_G.CLIENT_PACKET004_SPAWNEFFECT = CLIENT_PACKET004_SPAWNEFFECT
-	CLIENT_PACKET004_SPAWNEFFECT.__index = CLIENT_PACKET004_SPAWNEFFECT
+Import("Class")
+
+do CLIENT_PACKET004_SPAWNEFFECT = Class("CLIENT_PACKET004_SPAWNEFFECT")
 
 	function CLIENT_PACKET004_SPAWNEFFECT.new(id, level, speed, posX, posY, type, dirVec, size, color)
 		local packet = {}

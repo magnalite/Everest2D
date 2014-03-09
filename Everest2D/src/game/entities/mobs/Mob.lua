@@ -6,9 +6,7 @@ _G.Import("Import")
 Import("Extends")
 Import("Entity")
 
-do Mob = Extends(Entity)
-	_G.Mob = Mob
-	Mob.__index = Mob
+do Mob = Extends("Mob", Entity)
 
 	function Mob.new(id, game, level, hp, name, speed, posX, posY, type)
 		local mob = Entity.new(id, level, posX, posY)

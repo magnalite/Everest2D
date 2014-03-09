@@ -2,9 +2,9 @@
 repeat wait() until _G.Import
 _G.Import("Import")
 
-do SERVER_PACKET001_START = {}
-	_G.SERVER_PACKET001_START = SERVER_PACKET001_START
-	SERVER_PACKET001_START.__index = SERVER_PACKET001_START
+Import("Class")
+
+do SERVER_PACKET001_START = Class("SERVER_PACKET001_START")
 
 	function SERVER_PACKET001_START.new(level, posX, posY, id)
 		local packet = {}

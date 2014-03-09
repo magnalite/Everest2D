@@ -3,10 +3,9 @@
 repeat wait() until _G.Import
 _G.Import("Import")
 
+Import("Class")
 
-do Level = {}
-	_G.Level = Level
-	Level.__index = Level
+do Level = Class("Level")
 	
 	Level.allLevels = {}
 	

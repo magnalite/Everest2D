@@ -2,9 +2,9 @@
 repeat wait() until _G.Import
 _G.Import("Import")
 
-do SERVER_PACKET002_SPAWN = {}
-	_G.SERVER_PACKET002_SPAWN = SERVER_PACKET002_SPAWN
-	SERVER_PACKET002_SPAWN.__index = SERVER_PACKET002_SPAWN
+Import("Class")
+
+do SERVER_PACKET002_SPAWN = Class("SERVER_PACKET002_SPAWN")
 
 	function SERVER_PACKET002_SPAWN.new(type, playerToSpawn, x, y, id)
 		local packet = {}

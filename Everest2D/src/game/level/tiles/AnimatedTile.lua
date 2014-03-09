@@ -7,11 +7,8 @@ Import("Extends")
 Import("BasicTile")
 
 
-repeat wait() until Extends
-do AnimatedTile = Extends(BasicTile)
-	_G.AnimatedTile = AnimatedTile
-	AnimatedTile.__index = AnimatedTile
-	
+do AnimatedTile = Extends("AnimatedTile", BasicTile)
+
 	--frames = total number of frames
 	--delay = time between the frames
 	function AnimatedTile.new(id, isWalkable, spriteSheet, spritePosX, spritePosY, frames, delay)

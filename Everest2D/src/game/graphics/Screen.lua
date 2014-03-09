@@ -3,10 +3,9 @@
 repeat wait() until _G.Import
 _G.Import("Import")
 
+Import(Class)
 
-do Screen = {}
-	_G.Screen = Screen
-	Screen.__index = Screen
+do Screen = Class("Screen")
 
 	Import("Hud")
 
@@ -33,13 +32,6 @@ do Screen = {}
 		
 		screen.posX = 0
 		screen.posY = 0
-		
-		--Gets the players mouse position and translates it to world coords
-		if not _G.isServer then
-			_G.rbxGame:GetService("RunService").RenderStepped:connect(function()
-				screen.testFrame.Position = UDim2.new(0, game.inputHandler.mouse.X + screen.posX * 32, 0, game.inputHandler.mouse.Y + screen.posY * 32)
-			end)
-		end
 		
 		screen.game = game
 		screen.sizeX = sizeX

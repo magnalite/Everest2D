@@ -3,9 +3,9 @@
 repeat wait() until _G.Import
 _G.Import("Import")
 
-do Tile = {}
-	_G.Tile = Tile
-	Tile.__index = Tile
+Import("Class")
+
+do Tile = Class("Tile")
 	
 	Tile.Tiles = {}
 	

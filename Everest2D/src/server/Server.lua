@@ -3,10 +3,9 @@
 repeat wait() until _G.Import
 _G.Import("Import")
 
-do Server = {}
-	_G.Server = Server
-	Server.__index = Server
+Import("Class")
 
+do Server = Class("Server")
 
 	Import("ServerPacketHandler")
 	function Server.new()

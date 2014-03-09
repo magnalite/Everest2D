@@ -3,10 +3,9 @@
 repeat wait() until _G.Import
 _G.Import("Import")
 
+Import("Class")
 
-do Hud = {}
-	_G.Hud = Hud
-	Hud.__index = Hud
+do Hud = Class("Hud")
 	
 	function Hud.new(screen)
 		local hud = {}

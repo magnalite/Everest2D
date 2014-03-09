@@ -2,9 +2,9 @@
 repeat wait() until _G.Import
 _G.Import("Import")
 
-do ClientPacketHandler = {}
-	_G.ClientPacketHandler = ClientPacketHandler
-	ClientPacketHandler.__index = ClientPacketHandler
+Import("Class")
+
+do ClientPacketHandler = Class("ClientPacketHandler")
 
 	function ClientPacketHandler.new(game)
 		local clientPacketHandler = {}

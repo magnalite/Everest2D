@@ -6,9 +6,7 @@ _G.Import("Import")
 Import("Extends")
 Import("Mob")
 
-do Player = Extends(Mob)
-	_G.Player = Player
-	Player.__index = Player
+do Player = Extends("Player", Mob)
 		
 	Import("SpriteSheet")
 	
@@ -60,7 +58,7 @@ do Player = Extends(Mob)
 			if self.input.keys["Button1"] then
 				local mousePos = Vector2.new((self.input.mouse.X + _G.localgame.screen.posX * 32)/32, (self.input.mouse.Y + _G.localgame.screen.posY * 32)/32)
 				local dirVec = (mousePos - Vector2.new(self.posX, self.posY)).unit
-				local missile = BasicMissile.new(#self.level.entities + 1, self.level, 3, self.posX, self.posY, "BasicMissile", dirVec, UDim2.new(0, 10, 0, 10), Color3.new(255/255,50/255,50/255))
+				local missile = BasicMissile.new(#self.level.entities + 1, self.level, 3, self.posX, self.posY, "BasicMissile", dirVec, UDim2.new(0, 10, 0, 10), Color3.new(0,191/255,1))
 				self.game.packetHandler:sendPacket(CLIENT_PACKET004_SPAWNEFFECT.new(#self.level.entities + 1, self.level, 3, self.posX, self.posY, "BasicMissile", dirVec, UDim2.new(0, 10, 0, 10), Color3.new(255/255,50/255,50/255)):Data())
 			end
 		end

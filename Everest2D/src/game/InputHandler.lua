@@ -3,9 +3,9 @@
 repeat wait() until _G.Import
 _G.Import("Import")
 
-do InputHandler = {}
-	_G.InputHandler = InputHandler
-	InputHandler.__index = InputHandler
+Import("Class")
+
+do InputHandler = Class("InputHandler")
 	
 	function InputHandler.new(game)
 		local inputHandler = {}

@@ -3,10 +3,9 @@
 repeat wait() until _G.Import
 _G.Import("Import")
 
+Import("Class")
 
-do SpriteSheet = {}
-	_G.SpriteSheet = SpriteSheet
-	SpriteSheet.__index = SpriteSheet
+do SpriteSheet = Class("SpriteSheet")
 	
 	function SpriteSheet.new(name, urlId, spriteSizeX, spriteSizeY)
 		local spriteSheet = {}

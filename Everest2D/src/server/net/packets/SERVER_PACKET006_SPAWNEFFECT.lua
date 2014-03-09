@@ -2,9 +2,9 @@
 repeat wait() until _G.Import
 _G.Import("Import")
 
-do SERVER_PACKET006_SPAWNEFFECT = {}
-	_G.SERVER_PACKET006_SPAWNEFFECT = SERVER_PACKET006_SPAWNEFFECT
-	SERVER_PACKET006_SPAWNEFFECT.__index = SERVER_PACKET006_SPAWNEFFECT
+Import("Class")
+
+do SERVER_PACKET006_SPAWNEFFECT = Class("SERVER_PACKET006_SPAWNEFFECT")
 
 	function SERVER_PACKET006_SPAWNEFFECT.new(id, level, speed, posX, posY, type, dirVecX, dirVecY, size, color)
 		local packet = {}

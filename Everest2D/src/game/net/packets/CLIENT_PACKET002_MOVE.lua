@@ -3,9 +3,9 @@
 repeat wait() until _G.Import
 _G.Import("Import")
 
-do CLIENT_PACKET002_MOVE = {}
-	_G.CLIENT_PACKET002_MOVE = CLIENT_PACKET002_MOVE
-	CLIENT_PACKET002_MOVE.__index = CLIENT_PACKET002_MOVE
+Import("Class")
+
+do CLIENT_PACKET002_MOVE = Class("CLIENT_PACKET002_MOVE")
 
 	function CLIENT_PACKET002_MOVE.new(id, xa, ya, speed, posX, posY)
 		local packet = {}

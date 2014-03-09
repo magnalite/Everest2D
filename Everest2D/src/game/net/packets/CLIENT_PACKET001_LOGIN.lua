@@ -3,9 +3,9 @@
 repeat wait() until _G.Import
 _G.Import("Import")
 
-do CLIENT_PACKET001_LOGIN = {}
-	_G.CLIENT_PACKET001_LOGIN = CLIENT_PACKET001_LOGIN
-	CLIENT_PACKET001_LOGIN.__index = CLIENT_PACKET001_LOGIN
+Import("Class")
+
+do CLIENT_PACKET001_LOGIN = Class("CLIENT_PACKET001_LOGIN")
 
 	function CLIENT_PACKET001_LOGIN.new()
 		local packet = {}

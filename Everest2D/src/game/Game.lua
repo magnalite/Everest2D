@@ -8,10 +8,10 @@ _G.rbxGame = game
 repeat wait() until _G.Import
 _G.Import("Import")
 
+Import("Class")
+
 --Defines the game class
-do Game = {}
-	_G.Game = Game
-	Game.__index = Game
+do Game = Class("Game")
 
 	function Game.new()
 		local game = {}

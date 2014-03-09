@@ -3,9 +3,9 @@
 repeat wait() until _G.Import
 _G.Import("Import")
 
-do Entity = {}
-	_G.Entity = Entity
-	Entity.__index = Entity
+Import("Class")
+
+do Entity = Class("Entity")
 	
 	function Entity.new(id, level, posX, posY)
 		entity = {}

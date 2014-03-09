@@ -6,11 +6,7 @@ _G.Import("Import")
 Import("Extends")
 Import("Tile")
 
-
-repeat wait() until Extends
-do BasicTile = Extends(Tile)
-	_G.BasicTile = BasicTile
-	BasicTile.__index = BasicTile
+do BasicTile = Extends("BasicTile", Tile)
 	
 	function BasicTile.new(id, isWalkable, spriteSheet, spritePosX, spritePosY)
 		basicTile = Tile.new(id, isWalkable)

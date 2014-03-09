@@ -2,10 +2,9 @@
 repeat wait() until _G.Import
 _G.Import("Import")
 
+Import("Class")
 
-do ServerPacketHandler = {}
-	_G.ServerPacketHandler = ServerPacketHandler
-	ServerPacketHandler.__index = ServerPacketHandler
+do ServerPacketHandler = Class("ServerPacketHandler")
 
 	function ServerPacketHandler.new(server)
 		local serverPacketHandler = {}
