@@ -196,5 +196,6 @@ do --MAIN
 	repeat wait() until Workspace:FindFirstChild("PacketHandler")
 	local game = Game.new()
 	_G.localgame = game
+	repeat wait() until game.start
 	game:start()
 end

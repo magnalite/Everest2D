@@ -28,7 +28,7 @@ do Tile = Class("Tile")
 	
 	function Tile:render(screen, posX, posY)
 		
-		local rendered = Instance.new("ImageLabel", screen.frame)
+		local rendered = _G.GuiRecycling.getGui()
 		rendered.BorderSizePixel = 0
 		rendered.ZIndex = 2
 		rendered.Size = UDim2.new(0, 32, 0, 32)
@@ -36,7 +36,7 @@ do Tile = Class("Tile")
 		rendered.Image = self.spriteSheet.url
 		rendered.ImageRectSize = self.spriteSheet.vector2Size + Vector2.new(-2, -2)
 		rendered.ImageRectOffset = self.spritePosVec + Vector2.new(1,1)
-		
+		rendered.Parent = screen.frame
 		
 		return rendered
 	end

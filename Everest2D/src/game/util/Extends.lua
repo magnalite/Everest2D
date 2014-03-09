@@ -7,7 +7,7 @@ function _G.Extends(className, toExtend)
 	setmetatable(extendee, toExtend)
 	
 	_G[className] = extendee
-	extendee.__Index = extendee
+	extendee.__index = extendee
 	
 	return extendee
 end

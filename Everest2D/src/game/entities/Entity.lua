@@ -19,6 +19,7 @@ do Entity = Class("Entity")
 			table.insert(level.entities, entity)
 			entity.levelId = #level.entities
 		end
+		
 		entity.posX = posX
 		entity.posY = posY
 		

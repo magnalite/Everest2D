@@ -3,7 +3,7 @@
 repeat wait() until _G.Import
 _G.Import("Import")
 
-Import(Class)
+Import("Class")
 
 do Screen = Class("Screen")
 
@@ -101,14 +101,14 @@ do Screen = Class("Screen")
 			for y, tile in pairs(ytab) do
 				if not used[x] then
 					for y, tile in pairs(ytab) do
-						tile:Destroy()
+						_G.GuiRecycling.addGui(tile)
 						self.rendered[x][y] = nil
 					end
 					self.rendered[x] = nil
 					used[x] = nil
 					break
 				elseif not used[x][y] then
-					tile:Destroy()
+					_G.GuiRecycling.addGui(tile)
 					self.rendered[x][y] = nil
 					used[x][y] = nil
 				end

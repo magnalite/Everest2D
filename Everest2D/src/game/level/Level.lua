@@ -6,7 +6,6 @@ _G.Import("Import")
 Import("Class")
 
 do Level = Class("Level")
-	
 	Level.allLevels = {}
 	
 	function Level.new(width, height, tiles, name)

@@ -4,8 +4,7 @@ repeat wait() until _G.Import
 _G.Import("Import")
 
 Import("Level")
-wait(1) --Wait for level to fully declare itself
-
+repeat wait() until Level.testRandomGenerate --Wait for level to fully declare itself
 local levelData = {}
 
 --Example data structure
