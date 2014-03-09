@@ -15,7 +15,7 @@ To compile, simply run compile.lua. The resultant file (formatted as "ver-%d.rbx
 
 Once compiled, you will need to move a few things.
 
-* Everest2D should be moved to StarterGui
+* Everest2DClient should be moved to StarterGui
 * Everest2DServer should be moved to ServerScriptService
 
 Reporting bugs
