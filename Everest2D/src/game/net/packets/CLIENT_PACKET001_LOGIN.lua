@@ -28,6 +28,8 @@ do CLIENT_PACKET001_LOGIN = Class("CLIENT_PACKET001_LOGIN")
 	function CLIENT_PACKET001_LOGIN.Handle(player, data)
 
 		_G.localserver.players[player] = {lastInteracted = tick(), player = Player.new(nil, _G.localgame, Level.allLevels["TestLevel"], 100, player.Name, 5, 5, nil)}
+		_G.localserver.players[player].playerMobs = {}
+		_G.localserver.players[player].playerMobs[_G.localserver.players[player].player] = true
 		_G.localserver.packetHandler:sendPacket(player, SERVER_PACKET001_START.new("TestLevel", 5, 5, _G.localserver.players[player].player.levelId):Data())
 		
 		for playerToSpawn, playerInTable in pairs(_G.localserver.players) do

@@ -46,3 +46,22 @@ levelData[32] = {4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4
 Level.TestLevel = Level.new(500,500, nil, "TestLevel"):testRandomGenerate()
 
 Level.ready = true
+
+
+Import("TestMob")
+
+wait(10)
+if _G.isServer then
+	local mob = TestMob.new(nil, _G.localgame, Level.TestLevel, 100, "!testmob!", 30, 30)
+	for i = 1, 200 do
+		TestMob.new(nil, _G.localgame, Level.TestLevel, 100, "!testmob!", math.random(1,100), math.random(1,100))
+	end
+end	
+	
+	
+	
+	
+	
+	
+	
+	

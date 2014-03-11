@@ -24,10 +24,15 @@ do SERVER_PACKET002_SPAWN = Class("SERVER_PACKET002_SPAWN")
 	end
 	
 	Import("Player")
+	Import("TestMob")
 	
 	function SERVER_PACKET002_SPAWN.Handle(data)
 		if data[2] == "Player" then
-			p = Player.new(data[6], _G.localgame, _G.localgame.level, 100, data[3], data[4], data[5], nil)
+			print("SPAWNING PLAYER")
+			Player.new(data[6], _G.localgame, _G.localgame.level, 100, data[3], data[4], data[5], nil)
+		elseif data[2] == "TestMob" then
+			print("SPAWNING TESTMOB")
+			TestMob.new(data[6], _G.localgame, _G.localgame.level, 100, data[3], data[4], data[5])
 		end
 	end
 end

@@ -8,7 +8,6 @@ function _G.GuiRecycling.addGui(gui)
 end
 
 function _G.GuiRecycling.getGui()
-	print(#_G.GuiRecycling.Guis)
 	if #_G.GuiRecycling.Guis > 1 then
 		local gui = _G.GuiRecycling.Guis[#_G.GuiRecycling.Guis]
 		gui.Image = ""

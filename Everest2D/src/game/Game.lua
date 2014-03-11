@@ -91,6 +91,10 @@ do Game = Class("Game")
 	end
 
 	function Game:run()
+	
+		self.lasttick = tick()
+		self.lastframe = tick()
+	
 		local timeAtStart = tick()
 		local lastTime = tick()
 		local minTimePerTick = 1/60
@@ -103,56 +107,60 @@ do Game = Class("Game")
 		local unProcessedTime = 0
 		local unRenderedTime = 0
 		local lasttick = tick()
+		local deltaTime = 0
 		--The game cycle (calls everything)
+		if _G.isServer then
+			while self.running do
+				wait(1/20)
+				self:tick()
+			end
+		end
+		
+		local skip = 0
 		
 		_G.rbxGame:GetService("RunService").RenderStepped:connect(function()
-		--while (self.running) do
-			--[[local now = tick()
-			unProcessedTime = unProcessedTime + ((now - lastTime) / minTimePerTick)
-			unRenderedTime = unRenderedTime + ((now - lastTime) / minTimePerFrame)
-			lastTime = now
-
-			while (unProcessedTime >= 1) do
-				ticks = ticks + 1
+			skip = skip + 1
+			self:render()
+			if skip >= 3 then
 				self:tick()
-				unProcessedTime = unProcessedTime - 1
+				skip = 0
 			end
-
-			while (unRenderedTime >= 1) do
-				frames = frames + 1
-				self:render()
-				unRenderedTime = unRenderedTime - 1
-			end
-
-			wait(0)
-
-			if (now - lastTimer >= 1 ) then
-				lastTimer = lastTimer + 1
-				frames = 0
-				ticks = 0
-			end]]--
-			
-			self.deltaTime = tick() - lasttick
-			self:tick(self.deltaTime)
-			self:render(self.deltaTime)
-			lasttick = tick()
 		end)
+		
 	end
+
+	Import("Level")
 
 	function Game:tick(deltaTime)
 		self.tickCount = self.tickCount + 1
-
+		
+		local deltaTime = tick() - self.lasttick
+		self.lasttick = tick()
+		
+		
 		if self.player then
+			self.screen.hud.tickCounter.Text = "Tick Rate  " .. math.ceil(1/deltaTime)
 			self.player.level:tick(deltaTime)
+		end
+
+		if _G.isServer then
+			for i, v in pairs(Level.allLevels) do
+				v:tick()
+			end
 		end
 
 	end
 	
 	function Game:render(deltaTime)
 		if not _G.isServer then
+		
+			local deltaTime = tick() - self.lastframe
+			self.lastframe = tick()
+		
 			self.frameCount = self.frameCount + 1
 
 			if self.player then
+				self.screen.hud.frameCounter.Text = "Frame Rate  " .. math.ceil(1/deltaTime)
 				self.player.level:render(deltaTime)
 				self.screen:render(deltaTime, self.player.posX - (self.screen.sizeX / 2), self.player.posY - (self.screen.sizeY / 2))
 			end

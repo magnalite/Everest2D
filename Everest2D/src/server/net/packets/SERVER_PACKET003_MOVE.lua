@@ -27,5 +27,6 @@ do SERVER_PACKET003_MOVE = Class("SERVER_PACKET003_MOVE")
 	
 	function SERVER_PACKET003_MOVE.Handle(data)
 		_G.localgame.player.level:getEntityFromId(data[2]):move(data[3], data[4], data[5], data[6], data[7])
+		
 	end
 end

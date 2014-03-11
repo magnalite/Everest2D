@@ -29,9 +29,9 @@ do Level = Class("Level")
 		return level
 	end
 	
-	function Level:tick()
+	function Level:tick(deltaTime)
 		for _, entity in pairs(self.entities) do
-			entity:tick()
+			entity:tick(deltaTime)
 		end
 		
 	end	

@@ -13,6 +13,7 @@ do BasicMissile = Extends("BasicMissile", Entity)
 		local basicMissile = Entity.new(id, level, posX, posY)
 		setmetatable(basicMissile, BasicMissile)
 
+		basicMissile.name = "BasicMissile"
 		basicMissile.speed = speed
 		basicMissile.type = type
 		basicMissile.movingDir = movingDir

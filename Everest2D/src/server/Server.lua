@@ -16,6 +16,7 @@ do Server = Class("Server")
 		_G.localserver = server
 		server.packetHandler = ServerPacketHandler.new(server)
 		server.players = {}
+		server.playerMobs = {}
 		server.playersLastConnect = {}
 
 		return server

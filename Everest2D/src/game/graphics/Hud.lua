@@ -40,6 +40,32 @@ do Hud = Class("Hud")
 		hud.playerName.Name = "PlayerName"
 		hud.playerName.ZIndex = 9
 		
+		hud.tickCounter = Instance.new("TextLabel", hud.frame)
+		hud.tickCounter.Size = UDim2.new(0,100,0,40)
+		hud.tickCounter.Position = UDim2.new(0.5, -50, 0, 25)
+		hud.tickCounter.BackgroundTransparency = 1
+		hud.tickCounter.Text = "Tick rate - ERROR"
+		hud.tickCounterTextXAlignment = "Center"
+		hud.tickCounter.TextScaled = true
+		hud.tickCounter.Font = "ArialBold"
+		hud.tickCounter.TextColor3 = Color3.new(1,1,1)
+		hud.tickCounter.TextStrokeTransparency = 0
+		hud.tickCounter.Name = "tickCounter"
+		hud.tickCounter.ZIndex = 9
+		
+		hud.frameCounter = Instance.new("TextLabel", hud.frame)
+		hud.frameCounter.Size = UDim2.new(0,100,0,40)
+		hud.frameCounter.Position = UDim2.new(0.5, 50, 0, 25)
+		hud.frameCounter.BackgroundTransparency = 1
+		hud.frameCounter.Text = "Frame rate - ERROR"
+		hud.frameCounterTextXAlignment = "Center"
+		hud.frameCounter.TextScaled = true
+		hud.frameCounter.Font = "ArialBold"
+		hud.frameCounter.TextColor3 = Color3.new(1,1,1)
+		hud.frameCounter.TextStrokeTransparency = 0
+		hud.frameCounter.Name = "frameCounter"
+		hud.frameCounter.ZIndex = 9
+		
 		hud.playerHealth = Instance.new("TextLabel", hud.playerInfo)
 		
 		

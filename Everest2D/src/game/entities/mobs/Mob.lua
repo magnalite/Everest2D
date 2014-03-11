@@ -13,6 +13,7 @@ do Mob = Extends("Mob", Entity)
 		setmetatable(mob, Mob)
 
 		mob.name = name
+		mob.Name = name
 		mob.hp = hp
 		mob.speed = speed
 		mob.type = type
@@ -53,8 +54,14 @@ do Mob = Extends("Mob", Entity)
 		end
 
 		self.numSteps = self.numSteps + 1
+		
+		local xCollide, yCollide = self:hasCollided(xa, ya)
 
-		if not self:hasCollided(xa, ya) then
+
+		xa = xCollide and 0 or xa
+		ya = yCollide and 0 or ya
+
+		if xa ~= 0 or ya ~= 0 then
 
 			if ya < 0 then self.movingDir = "NORTH" end
 			if ya > 0 then self.movingDir = "SOUTH" end
@@ -83,24 +90,29 @@ do Mob = Extends("Mob", Entity)
 	--Find if the mob moving from x,y via xa ya will collide with a tile
 	--Factors in the scale of the mob
 	function Mob:isSolidTile(x, y, xa, ya)
-
-		local x = math.max(0, math.floor(x + xa))
-		local x = math.min(self.level.width, x)
-		local y = math.max(0, math.floor(y + ya))
-		local y = math.min(self.level.height, y)
-
-		local solid = false
-		if x >= self.level.width - 1 or x <= 0 or y >= self.level.height - 1 or y <= 0 then return true end
-		for xi = 0, math.ceil(self.scale) do
-			for yi = 0, math.ceil(self.scale) do
-				local nextTile = Tile.Tiles[self.level.tiles[x + xi][y + yi]]
-				if not nextTile.isWalkable then solid = true end
+		
+		x = math.floor(x + 0.5)
+		y = math.floor(y + 0.5)
+		xa = math.floor(xa + 0.5)
+		ya = math.floor(ya + 0.5)
+		
+		local xCollide
+		local yCollide
+		
+		for yd = math.ceil(-self.scale/2), math.floor(self.scale/2), 1 do
+			if     not self.level.tiles[x + xa]                                then xCollide = true
+			elseif not self.level.tiles[x + xa][y + yd]                        then xCollide = true
+			elseif not Tile.Tiles[self.level.tiles[x + xa][y + yd]].isWalkable then xCollide = true 
 			end
 		end
-		local nextTile = Tile.Tiles[self.level.tiles[x][y]]
-
-		return solid
-
+		for xd = math.ceil(-self.scale/2), math.floor(self.scale/2), 1 do
+			if     not self.level.tiles[x + xd]                                then yCollide = true
+			elseif not self.level.tiles[x + xd][y + ya]                        then yCollide = true
+			elseif not Tile.Tiles[self.level.tiles[x + xd][y + ya]].isWalkable then yCollide = true 
+			end
+		end
+		
+		return xCollide, yCollide
 	end
 
 end
