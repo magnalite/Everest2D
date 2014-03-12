@@ -35,6 +35,8 @@ do ServerPacketHandler = Class("ServerPacketHandler")
 	Import("CLIENT_PACKET002_MOVE")
 	Import("CLIENT_PACKET003_KEEPCONNECTION")
 	Import("CLIENT_PACKET004_SPAWNEFFECT")
+	Import("CLIENT_PACKET005_CHATTED")
+	
 	function ServerPacketHandler:receivedPacket(player, data)
 		local stringData = ""
 		for _, v in pairs(data) do stringData = stringData .. " " .. tostring(v) end

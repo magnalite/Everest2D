@@ -24,6 +24,7 @@ do Screen = Class("Screen")
 		screen.frame.ZIndex = 2
 		screen.frame.BackgroundTransparency = 1
 		screen.frame.Name = "Screen"
+		
 		screen.testFrame = Instance.new("Frame", screen.frame)
 		screen.testFrame.Size = UDim2.new(0,10,0,10)
 		screen.testFrame.ZIndex = 6

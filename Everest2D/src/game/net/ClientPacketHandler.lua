@@ -36,6 +36,8 @@ do ClientPacketHandler = Class("ClientPacketHandler")
 	Import("SERVER_PACKET004_DISCONNECT")
 	Import("SERVER_PACKET005_DISCONNECTOTHER")
 	Import("SERVER_PACKET006_SPAWNEFFECT")
+	Import("SERVER_PACKET007_CHATTED")
+	
 	function ClientPacketHandler:receivedPacket(data)
 		local stringData = ""
 		for _, v in pairs(data) do stringData = stringData .. " " .. tostring(v) end

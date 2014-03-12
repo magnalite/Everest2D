@@ -94,21 +94,9 @@ do Game = Class("Game")
 	
 		self.lasttick = tick()
 		self.lastframe = tick()
-	
-		local timeAtStart = tick()
-		local lastTime = tick()
-		local minTimePerTick = 1/60
-		local minTimePerFrame = 1/60
-
-		local ticks = 0
-		local frames = 0
-
-		local lastTimer = tick()
-		local unProcessedTime = 0
-		local unRenderedTime = 0
-		local lasttick = tick()
-		local deltaTime = 0
+		
 		--The game cycle (calls everything)
+		
 		if _G.isServer then
 			while self.running do
 				wait(1/20)
@@ -130,6 +118,7 @@ do Game = Class("Game")
 	end
 
 	Import("Level")
+	Import("SERVER_PACKET007_CHATTED")
 
 	function Game:tick(deltaTime)
 		self.tickCount = self.tickCount + 1
@@ -143,9 +132,15 @@ do Game = Class("Game")
 			self.player.level:tick(deltaTime)
 		end
 
+					
 		if _G.isServer then
+			if math.random(1, 20) == 1 then
+				for playerTo, _ in pairs(_G.localserver.players) do
+					_G.localserver.packetHandler:sendPacket(playerTo, SERVER_PACKET007_CHATTED.new("Server", Color3.new(1,1,1), " The current server tick rate is : " .. tostring(math.ceil(1/deltaTime)), Color3.new(1,1,1)):Data())
+				end
+			end
 			for i, v in pairs(Level.allLevels) do
-				v:tick()
+				v:tick(deltaTime)
 			end
 		end
 

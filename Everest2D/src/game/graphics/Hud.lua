@@ -66,11 +66,55 @@ do Hud = Class("Hud")
 		hud.frameCounter.Name = "frameCounter"
 		hud.frameCounter.ZIndex = 9
 		
+		hud.chat = Instance.new("Frame", hud.frame)
+		hud.chat.Size = UDim2.new(0, 400, 0, 250)
+		hud.chat.Position = UDim2.new(0, 40, 1, -290)
+		hud.chat.BackgroundTransparency = 0.7
+		hud.chat.Name = "Chatbox"
+		hud.chat.ClipsDescendants = true
+		hud.chat.ZIndex = 8
+		
 		hud.playerHealth = Instance.new("TextLabel", hud.playerInfo)
 		
 		
 		
 		return hud
+	end
+	
+	function Hud:DisplayChat(playerName, nameColor, chat, chatColor)
+
+	
+		local chatLength = #chat
+		local chatHeightMod = math.ceil(chatLength / 44)
+			
+		for _, v in pairs(self.chat:GetChildren()) do
+			v.Position = UDim2.new(0, v.Position.X.Offset, 1, v.Position.Y.Offset -15 * chatHeightMod + 5)
+		end
+		
+		local nameBox = Instance.new("TextLabel", self.chat)
+		nameBox.BackgroundTransparency = 1
+		nameBox.Size = UDim2.new(0, 100, 0, 20)
+		nameBox.Position = UDim2.new(0, 0, 1, -15 * chatHeightMod - 5)
+		nameBox.Text = playerName
+		nameBox.TextStrokeTransparency = 0.4
+		nameBox.TextColor3 = nameColor
+		nameBox.Font = "SourceSans"
+		nameBox.FontSize = "Size14"
+		nameBox.TextXAlignment = "Left"
+		nameBox.ZIndex = 9
+		
+		local chatBox = Instance.new("TextLabel", self.chat)
+		chatBox.BackgroundTransparency = 1
+		chatBox.Size = UDim2.new(1, -110, 0, 15 * chatHeightMod + 5)
+		chatBox.Position = UDim2.new(0, 110, 1, -15 * chatHeightMod - 5)
+		chatBox.Text = chat
+		chatBox.TextStrokeTransparency = 0.4
+		chatBox.TextColor3 = chatColor
+		chatBox.Font = "SourceSans"
+		chatBox.FontSize = "Size14"
+		chatBox.TextXAlignment = "Left"
+		chatBox.TextWrapped = true
+		chatBox.ZIndex = 9
 	end
 	
 end
