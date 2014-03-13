@@ -1,6 +1,5 @@
 require("LuaXML")
 local lfs = require("lfs")
-local json = require("json")
 
 local projdata = xml.load(".buildpath"):find("buildpathentry")
 local projname = xml.load(".project"):find("name")[1]
