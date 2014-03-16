@@ -27,7 +27,7 @@ do CLIENT_PACKET001_LOGIN = Class("CLIENT_PACKET001_LOGIN")
 
 	function CLIENT_PACKET001_LOGIN.Handle(player, data)
 
-		_G.localserver.players[player] = {lastInteracted = tick(), player = Player.new(nil, _G.localgame, Level.allLevels["TestLevel"], 100, player.Name, 5, 5, nil)}
+		_G.localserver.players[player] = {lastInteracted = tick(), player = Player.new(nil, _G.localgame, Level.allLevels["TestLevel"], 100, 100, player.Name, 5, 5, nil)}
 		_G.localserver.players[player].playerMobs = {}
 		_G.localserver.players[player].playerMobs[_G.localserver.players[player].player] = true
 		_G.localserver.packetHandler:sendPacket(player, SERVER_PACKET001_START.new("TestLevel", 5, 5, _G.localserver.players[player].player.levelId):Data())
@@ -35,13 +35,13 @@ do CLIENT_PACKET001_LOGIN = Class("CLIENT_PACKET001_LOGIN")
 		for playerToSpawn, playerInTable in pairs(_G.localserver.players) do
 			if playerToSpawn ~= player then
 				_G.localserver.packetHandler:sendPacket(player, 
-					SERVER_PACKET002_SPAWN.new("Player", playerToSpawn, playerInTable.player.posX, playerInTable.player.posY, _G.localserver.players[playerToSpawn].player.levelId):Data())
+					SERVER_PACKET002_SPAWN.new("Player", playerToSpawn, playerInTable.player.posX, playerInTable.player.posY, _G.localserver.players[playerToSpawn].player.levelId, _G.localserver.players[playerToSpawn].player.hp, _G.localserver.players[playerToSpawn].player.maxHp):Data())
 			end
 		end
 
 		for playerToSend, _ in pairs(_G.localserver.players) do
 			if playerToSend ~= player then
-				_G.localserver.packetHandler:sendPacket(playerToSend, SERVER_PACKET002_SPAWN.new("Player", player, 5, 5, _G.localserver.players[player].player.levelId):Data())
+				_G.localserver.packetHandler:sendPacket(playerToSend, SERVER_PACKET002_SPAWN.new("Player", player, 5, 5, _G.localserver.players[player].player.levelId, _G.localserver.players[player].player.hp, _G.localserver.players[player].player.maxHp):Data())
 			end
 		end
 		

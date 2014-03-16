@@ -21,8 +21,12 @@ do Game = Class("Game")
 		
 		if not _G.isServer then 
 			local tempScreenSize = LocalPlayer.PlayerGui.ScreenGui.AbsoluteSize
-		
-			LocalPlayer.PlayerGui.ScreenGui:Destroy()
+
+			game.screenSizeHolder = LocalPlayer.PlayerGui.ScreenGui
+			
+			for _, v in pairs(game.screenSizeHolder:GetChildren()) do v:Destroy() end
+			
+
 			
 			game.canvasPart = Instance.new("Part", Workspace.CurrentCamera)
 			game.canvasPart.Anchored = true
@@ -37,6 +41,18 @@ do Game = Class("Game")
 			game.canvas = Instance.new("SurfaceGui", game.canvasPart)
 			game.canvas.CanvasSize = tempScreenSize
 			game.canvas.Adornee = game.canvasPart
+			
+			game.screenSizeHolder.Changed:connect(function() 
+				local tempScreenSize = game.screenSizeHolder.AbsoluteSize
+				game.canvasPart.Size = Vector3.new(3*math.tan(math.rad(35)) * 2 * (tempScreenSize.X/tempScreenSize.Y) , 3*math.tan(math.rad(35)) * 2, 0)
+				game.canvas.CanvasSize = tempScreenSize
+				if game.screen then
+					game.screen.sizeX = game.canvas.AbsoluteSize.X / 32
+					game.screen.sizeY = game.canvas.AbsoluteSize.Y / 32
+				end
+			end)
+			
+			
 			
 			Import("InputHandler")
 			Import("ClientPacketHandler")
@@ -104,14 +120,13 @@ do Game = Class("Game")
 			end
 		end
 		
-		local skip = 0
+		local lasttick = tick()
 		
 		_G.rbxGame:GetService("RunService").RenderStepped:connect(function()
-			skip = skip + 1
 			self:render()
-			if skip >= 3 then
+			if tick() - lasttick >= 0.05 then
 				self:tick()
-				skip = 0
+				lasttick = tick()
 			end
 		end)
 		
@@ -134,11 +149,11 @@ do Game = Class("Game")
 
 					
 		if _G.isServer then
-			if math.random(1, 20) == 1 then
+			--[[if math.random(1, 20) == 1 then
 				for playerTo, _ in pairs(_G.localserver.players) do
 					_G.localserver.packetHandler:sendPacket(playerTo, SERVER_PACKET007_CHATTED.new("Server", Color3.new(1,1,1), " The current server tick rate is : " .. tostring(math.ceil(1/deltaTime)), Color3.new(1,1,1)):Data())
 				end
-			end
+			end]]--
 			for i, v in pairs(Level.allLevels) do
 				v:tick(deltaTime)
 			end

@@ -8,15 +8,18 @@ Import("Entity")
 
 do Mob = Extends("Mob", Entity)
 
-	function Mob.new(id, game, level, hp, name, speed, posX, posY, type)
+	function Mob.new(id, game, level, hp, maxHp, name, speed, posX, posY, type)
+		print(id, game, level, hp, maxHp, name, speed, posX, posY, type)
 		local mob = Entity.new(id, level, posX, posY)
 		setmetatable(mob, Mob)
 
 		mob.name = name
 		mob.Name = name
 		mob.hp = hp
+		mob.maxHp = maxHp
 		mob.speed = speed
 		mob.type = type
+		mob.isMob = true
 		mob.numSteps = 0
 		mob.isMoving = false
 		mob.movingDir = "SOUTH"
@@ -24,6 +27,7 @@ do Mob = Extends("Mob", Entity)
 		mob.frame = Instance.new("ImageLabel", game.screen.frame)
 		mob.frame.BorderSizePixel = 0
 		mob.frame.BackgroundTransparency = 1
+		mob.frame.Position = UDim2.new(0, posX * 32, 0, posY * 32)
 		mob.frame.ZIndex = 5
 
 		mob.nameToolTip = Instance.new("TextLabel", mob.frame)
@@ -31,9 +35,38 @@ do Mob = Extends("Mob", Entity)
 		mob.nameToolTip.Size = UDim2.new(1,0,0.3,0)
 		mob.nameToolTip.Position = UDim2.new(0,0,-0.5,0)
 		mob.nameToolTip.BackgroundTransparency = 1
+		mob.nameToolTip.TextColor3 = Color3.new(1,1,1)
+		mob.nameToolTip.TextStrokeTransparency = 0
 		mob.nameToolTip.BorderSizePixel = 0
-		mob.nameToolTip.FontSize = "Size18"
+		mob.nameToolTip.FontSize = "Size14"
 		mob.nameToolTip.ZIndex = 8
+		
+		mob.healthBar = Instance.new("Frame", mob.nameToolTip)
+		mob.healthBar.Size = UDim2.new(1,0,0.3,0)
+		mob.healthBar.Position = UDim2.new(0,0,1.1,0)
+		mob.healthBar.BackgroundTransparency = 0
+		mob.healthBar.BackgroundColor3 = Color3.new(1,0,0)
+		mob.healthBar.BorderSizePixel = 1
+		mob.healthBar.ZIndex = 8
+		
+		mob.healthBarGreen = Instance.new("Frame", mob.healthBar)
+		mob.healthBarGreen.Size = UDim2.new(1,0,1,0)
+		mob.healthBarGreen.Position = UDim2.new(0,0,0,0)
+		mob.healthBarGreen.BackgroundTransparency = 0
+		mob.healthBarGreen.BackgroundColor3 = Color3.new(0,1,0)
+		mob.healthBarGreen.BorderSizePixel = 1
+		mob.healthBarGreen.ZIndex = 8
+		
+		mob.healthLabel = Instance.new("TextLabel", mob.healthBar)
+		mob.healthLabel.Text = hp
+		mob.healthLabel.Size = UDim2.new(0,0,0,0)
+		mob.healthLabel.Position = UDim2.new(0.5,0,0.5,0)
+		mob.healthLabel.BackgroundTransparency = 1
+		mob.healthLabel.TextColor3 = Color3.new(1,1,1)
+		mob.healthLabel.TextStrokeTransparency = 0
+		mob.healthLabel.BorderSizePixel = 0
+		mob.healthLabel.FontSize = "Size8"
+		mob.healthLabel.ZIndex = 8
 
 		return mob
 	end
@@ -113,6 +146,31 @@ do Mob = Extends("Mob", Entity)
 		end
 		
 		return xCollide, yCollide
+	end
+
+	Import("SERVER_PACKET008_DAMAGE")
+
+	function Mob:damage(amount, newHealth)
+		if _G.isServer then
+			self.hp = self.hp - amount
+			for playerTo, _ in pairs(_G.localserver.players) do
+				_G.localserver.packetHandler:sendPacket(playerTo, SERVER_PACKET008_DAMAGE.new(self.level.name, self.levelId, self.hp):Data())
+			end
+		else
+			self.hp = newHealth
+			self.healthLabel.Text = self.hp
+			self.healthBarGreen.Size = UDim2.new(self.hp/self.maxHp,0,1,0)
+		end
+		
+		if self.hp <= 0 then
+			self:kill()
+		end
+	end
+	
+	function Mob:kill()
+		self.level.entities[self.levelId] = nil  
+		self.frame:Destroy()
+		self = nil 
 	end
 
 end

@@ -7,12 +7,18 @@ Import("Class")
 
 do Entity = Class("Entity")
 	
+	local miscEntities = 0
+	
 	function Entity.new(id, level, posX, posY)
 		entity = {}
 		setmetatable(entity, Entity)
 		
 		entity.level = level
-		if id then
+		if id and id == 50000 then
+			level.entities[id + miscEntities] = entity
+			entity.levelId = id + miscEntities
+			miscEntities = miscEntities + 1
+		elseif id then
 			level.entities[id] = entity
 			entity.levelId = id
 		else

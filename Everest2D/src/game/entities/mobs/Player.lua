@@ -12,8 +12,8 @@ do Player = Extends("Player", Mob)
 	
 	Player.players = {}
 	
-	function Player.new(id, game, level, health, name, posX, posY, input)
-		local player = Mob.new(id, game, level, health, name, 1, posX, posY, "PLAYER")
+	function Player.new(id, game, level, health, maxHealth, name, posX, posY, input)
+		local player = Mob.new(id, game, level, health, maxHealth, name, 1, posX, posY, "PLAYER")
 		setmetatable(player, Player)
 		
 		
@@ -21,6 +21,7 @@ do Player = Extends("Player", Mob)
 			player.frame.ZIndex = 6
 		end
 		
+		player.isPlayer = true
 		player.input = input	
 		player.scale = 2
 		player.game = game
@@ -58,8 +59,8 @@ do Player = Extends("Player", Mob)
 			if self.input.keys["Button1"] then
 				local mousePos = Vector2.new((self.input.mouse.X + _G.localgame.screen.posX * 32)/32, (self.input.mouse.Y + _G.localgame.screen.posY * 32)/32)
 				local dirVec = (mousePos - Vector2.new(self.posX, self.posY)).unit
-				local missile = BasicMissile.new(10000, self.level, 5, self.posX, self.posY, "BasicMissile", dirVec, UDim2.new(0, 10, 0, 10), Color3.new(0,191/255,1))
-				self.game.packetHandler:sendPacket(CLIENT_PACKET004_SPAWNEFFECT.new(10000, self.level, 3, self.posX, self.posY, "BasicMissile", dirVec + Vector2.new(xa, ya) * self.speed, UDim2.new(0, 10, 0, 10), Color3.new(255/255,50/255,50/255)):Data())
+				local missile = BasicMissile.new(50000, self.level, 20, self.posX, self.posY, "BasicMissile", dirVec, UDim2.new(0, 10, 0, 10), Color3.new(0,191/255,1), true, false)
+				self.game.packetHandler:sendPacket(CLIENT_PACKET004_SPAWNEFFECT.new(50000, self.level, 20, self.posX, self.posY, "BasicMissile", dirVec + Vector2.new(xa, ya) * self.speed, UDim2.new(0, 10, 0, 10), Color3.new(255/255,50/255,50/255), false, false):Data())
 			end
 		end
 		

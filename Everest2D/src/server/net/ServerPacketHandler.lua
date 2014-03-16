@@ -36,6 +36,7 @@ do ServerPacketHandler = Class("ServerPacketHandler")
 	Import("CLIENT_PACKET003_KEEPCONNECTION")
 	Import("CLIENT_PACKET004_SPAWNEFFECT")
 	Import("CLIENT_PACKET005_CHATTED")
+	Import("CLIENT_PACKET006_DAMAGE")
 	
 	function ServerPacketHandler:receivedPacket(player, data)
 		local stringData = ""

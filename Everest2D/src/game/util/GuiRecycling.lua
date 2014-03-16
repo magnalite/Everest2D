@@ -8,10 +8,10 @@ function _G.GuiRecycling.addGui(gui)
 end
 
 function _G.GuiRecycling.getGui()
-	if #_G.GuiRecycling.Guis > 1 then
-		local gui = _G.GuiRecycling.Guis[#_G.GuiRecycling.Guis]
+	if #_G.GuiRecycling.Guis > 50 then
+		local gui = _G.GuiRecycling.Guis[1]
+		table.remove(_G.GuiRecycling.Guis, 1)
 		gui.Image = ""
-		table.remove(_G.GuiRecycling.Guis, #_G.GuiRecycling.Guis)
 		return gui
 	else
 		return Instance.new("ImageLabel")

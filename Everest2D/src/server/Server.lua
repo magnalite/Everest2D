@@ -10,6 +10,7 @@ do Server = Class("Server")
 	Import("ServerPacketHandler")
 	function Server.new()
 		print("!!!SERVER INITIALISING!!!")
+		Workspace.FilteringEnabled = true
 		local server = {}
 		setmetatable(server, Server)
 

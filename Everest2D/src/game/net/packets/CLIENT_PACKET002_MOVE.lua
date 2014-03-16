@@ -49,7 +49,7 @@ do CLIENT_PACKET002_MOVE = Class("CLIENT_PACKET002_MOVE")
 			local entityPos = Vector2.new(v.posX, v.posY)
 			if not _G.localserver.players[player].playerMobs[v] and (playerPos - entityPos).magnitude < 50 then
 				_G.localserver.players[player].playerMobs[v] = true
-				_G.localserver.packetHandler:sendPacket(player, SERVER_PACKET002_SPAWN.new(v.type, v, entityPos.X, entityPos.Y, v.levelId):Data())
+				_G.localserver.packetHandler:sendPacket(player, SERVER_PACKET002_SPAWN.new(v.type, v, entityPos.X, entityPos.Y, v.levelId, v.hp, v.maxHp):Data())
 			end
 		end
 	end

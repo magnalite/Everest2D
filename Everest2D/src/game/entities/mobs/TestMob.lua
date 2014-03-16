@@ -12,11 +12,11 @@ do TestMob = Extends("TestMob", Mob)
 	
 	TestMob.TestMobs = {}
 	
-	function TestMob.new(id, game, level, health, name, posX, posY)
-		local testMob = Mob.new(id, game, level, health, name, 0.8, posX, posY, "TestMob")
+	function TestMob.new(id, game, level, health, maxHealth, name, posX, posY)
+		local testMob = Mob.new(id, game, level, health, maxHealth, name, 0.8, posX, posY, "TestMob")
 		setmetatable(testMob, TestMob)
 
-		testMob.scale = 2
+		testMob.scale = 1
 		testMob.game = game
 		testMob.frame.Name = name
 		testMob.frame.Image = "http://www.roblox.com/asset/?id=149199457"
@@ -53,7 +53,7 @@ do TestMob = Extends("TestMob", Mob)
 					ya = ya or 0
 					
 					for player, _ in pairs(_G.localserver.players) do
-						_G.localserver.packetHandler:sendPacket(player, SERVER_PACKET006_SPAWNEFFECT.new(10000, self.level.name, 3, currentPos.X, currentPos.Y, "BasicMissile", moveVec.unit.X, moveVec.unit.Y, UDim2.new(0, 10, 0, 10), Color3.new(0,0,0)):Data())
+						--_G.localserver.packetHandler:sendPacket(player, SERVER_PACKET006_SPAWNEFFECT.new(10000, self.level.name, 3, currentPos.X, currentPos.Y, "BasicMissile", moveVec.unit.X, moveVec.unit.Y, UDim2.new(0, 10, 0, 10), Color3.new(0,0,0)):Data())
 						_G.localserver.packetHandler:sendPacket(player, SERVER_PACKET003_MOVE.new(self.levelId, xa, ya, self.speed, self.posX, self.posY):Data())
 					end
 				end

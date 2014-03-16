@@ -54,7 +54,7 @@ do Level = Class("Level")
 			if id then
 				local tile = Tile.Tiles[id]
 				if not tile.isWalkable then 
-					return Vector2.new(pos.X + math.floor(dirVec.X * i), pos.Y + math.floor(dirVec.Y * i)) + Vector2.new(0.5,0.5) - dirVec
+					return Vector2.new(math.floor(pos.X + dirVec.X * i), math.floor(pos.Y + dirVec.Y * i))
 				end
 			end
 		end

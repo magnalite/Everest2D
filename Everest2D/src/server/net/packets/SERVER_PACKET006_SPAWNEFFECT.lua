@@ -6,7 +6,7 @@ Import("Class")
 
 do SERVER_PACKET006_SPAWNEFFECT = Class("SERVER_PACKET006_SPAWNEFFECT")
 
-	function SERVER_PACKET006_SPAWNEFFECT.new(id, level, speed, posX, posY, type, dirVecX, dirVecY, size, color)
+	function SERVER_PACKET006_SPAWNEFFECT.new(id, level, speed, posX, posY, type, dirVecX, dirVecY, size, color, shouldDamageMobs, shouldDamagePlayer)
 		local packet = {}
 		setmetatable(packet, SERVER_PACKET006_SPAWNEFFECT)
 		
@@ -20,6 +20,8 @@ do SERVER_PACKET006_SPAWNEFFECT = Class("SERVER_PACKET006_SPAWNEFFECT")
 		packet.dirVecY = dirVecY
 		packet.size = size
 		packet.color = color
+		packet.shouldDamageMobs = shouldDamageMobs
+		packet.shouldDamagePlayer = shouldDamagePlayer
 		
 		return packet
 	end
@@ -42,7 +44,7 @@ do SERVER_PACKET006_SPAWNEFFECT = Class("SERVER_PACKET006_SPAWNEFFECT")
 	Import("Level")
 	function SERVER_PACKET006_SPAWNEFFECT.Handle(data)
 		if data[7] == "BasicMissile" then
-			BasicMissile.new(data[2],Level.allLevels[data[3]],data[4],data[5],data[6],data[7],Vector2.new(data[8],data[9]),data[10],data[11])
+			BasicMissile.new(data[2],Level.allLevels[data[3]],data[4],data[5],data[6],data[7],Vector2.new(data[8],data[9]),data[10],data[11],data[12],data[13])
 		end
 	end
 end
