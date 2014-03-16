@@ -16,7 +16,7 @@ do TestMob = Extends("TestMob", Mob)
 		local testMob = Mob.new(id, game, level, health, maxHealth, name, 0.8, posX, posY, "TestMob")
 		setmetatable(testMob, TestMob)
 
-		testMob.scale = 1
+		testMob.scale = 2
 		testMob.game = game
 		testMob.frame.Name = name
 		testMob.frame.Image = "http://www.roblox.com/asset/?id=149199457"

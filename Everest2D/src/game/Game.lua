@@ -31,7 +31,7 @@ do Game = Class("Game")
 			game.canvasPart = Instance.new("Part", Workspace.CurrentCamera)
 			game.canvasPart.Anchored = true
 			game.canvasPart.FormFactor = "Custom"
-			game.canvasPart.Size = Vector3.new(3*math.tan(math.rad(35)) * 2 * (tempScreenSize.X/tempScreenSize.Y) , 3*math.tan(math.rad(35)) * 2, 0)
+			game.canvasPart.Size = Vector3.new(3*math.tan(math.rad(35)) * 2 * (tempScreenSize.X/(tempScreenSize.Y+20)) , 3*math.tan(math.rad(35)) * 2, 0)
 			
 			Workspace.CurrentCamera.CameraType = "Scriptable"
 			Workspace.CurrentCamera.CameraSubject = game.canvasPart
@@ -44,7 +44,7 @@ do Game = Class("Game")
 			
 			game.screenSizeHolder.Changed:connect(function() 
 				local tempScreenSize = game.screenSizeHolder.AbsoluteSize
-				game.canvasPart.Size = Vector3.new(3*math.tan(math.rad(35)) * 2 * (tempScreenSize.X/tempScreenSize.Y) , 3*math.tan(math.rad(35)) * 2, 0)
+				game.canvasPart.Size = Vector3.new(3*math.tan(math.rad(35)) * 2 * (tempScreenSize.X/(tempScreenSize.Y+20)) , 3*math.tan(math.rad(35)) * 2, 0)
 				game.canvas.CanvasSize = tempScreenSize
 				if game.screen then
 					game.screen.sizeX = game.canvas.AbsoluteSize.X / 32
@@ -208,6 +208,7 @@ do --MAIN
 		repeat wait() until game.Players.LocalPlayer.Character
 		game.Players.LocalPlayer.Character:Destroy()
 		game.StarterGui:SetCoreGuiEnabled(2, false)
+		game.StarterGui:SetCoreGuiEnabled(1, false)
 		wait(5)
 	end
 	--waits for the server to start up (it creates the packethandler)

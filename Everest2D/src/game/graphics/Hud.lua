@@ -18,27 +18,83 @@ do Hud = Class("Hud")
 		hud.frame.BackgroundTransparency = 1
 		hud.frame.Name = "Hud"
 		
-		hud.playerInfo = Instance.new("ImageLabel", hud.frame)
-		hud.playerInfo.Size = UDim2.new(0, 300, 0, 100)
-		hud.playerInfo.BackgroundTransparency = 1
-		hud.playerInfo.BackgroundColor3 = Color3.new(0,0,0)
-		hud.playerInfo.Name = "PlayerInfo"
-		hud.playerInfo.Image = "http://www.roblox.com/asset/?id=135283499"
-		hud.playerInfo.ZIndex = 9
+		hud.statusBar = Instance.new("Frame", hud.frame)
+		hud.statusBar.Size = UDim2.new(1,0,0,50)
+		hud.statusBar.ZIndex = 9
+		hud.statusBar.BackgroundColor3 = Color3.new(0,0,0)
+		hud.statusBar.BackgroundTransparency = 0.3
+		hud.statusBar.Position = UDim2.new(0,0,1,-70)
 		
-		hud.playerName = Instance.new("TextLabel", hud.playerInfo)
-		hud.playerName.Size = UDim2.new(0,120,0,20)
-		hud.playerName.Position = UDim2.new(0,90,0,24)
-		hud.playerName.BackgroundTransparency = 1
-		hud.playerName.Text = screen.game.localPlayer.Name
-		hud.playerName.TextXAlignment = "Left"
-		hud.playerName.TextScaled = true
-		hud.playerName.FontSize = "Size24"
-		hud.playerName.Font = "ArialBold"
-		hud.playerName.TextColor3 = Color3.new(1,1,1)
-		hud.playerName.TextStrokeTransparency = 0
-		hud.playerName.Name = "PlayerName"
-		hud.playerName.ZIndex = 9
+		hud.levelIndicator = Instance.new("TextLabel", hud.statusBar)
+		hud.levelIndicator.BackgroundTransparency = 1
+		hud.levelIndicator.BorderSizePixel = 0
+		hud.levelIndicator.Position = UDim2.new(0,50,0,0)
+		hud.levelIndicator.Size = UDim2.new(0,120,0,50)
+		hud.levelIndicator.ZIndex = 9
+		hud.levelIndicator.FontSize = "Size48"
+		hud.levelIndicator.TextColor3 = Color3.new(0,0,0)
+		hud.levelIndicator.TextStrokeColor3 = Color3.new(1,1,1)
+		hud.levelIndicator.TextStrokeTransparency = 0.5
+		hud.levelIndicator.TextXAlignment = "Left"
+		hud.levelIndicator.Font = "SourceSans"
+		hud.levelIndicator.Text = "Lv:###"
+		
+		hud.xpBar = Instance.new("Frame", hud.statusBar)
+		hud.xpBar.Size = UDim2.new(1, -170, 0.3, 0)
+		hud.xpBar.Position = UDim2.new(0, 170, 0.7, 0)
+		hud.xpBar.ZIndex = 9
+		hud.xpBar.BackgroundColor3 = Color3.new(255/255, 170/255,0)
+		hud.xpBar.BorderColor3 = Color3.new(0,0,0)
+		hud.xpBar.BorderSizePixel = 3
+		
+		hud.xpText = Instance.new("TextLabel", hud.xpBar)
+		hud.xpText.Size = UDim2.new(0,0,0,0)
+		hud.xpText.Position = UDim2.new(0.5,0,0.5,0)
+		hud.xpText.ZIndex = 9
+		hud.xpText.BackgroundTransparency = 1
+		hud.xpText.TextColor3 = Color3.new(1,1,1)
+		hud.xpText.TextStrokeTransparency = 0
+		hud.xpText.Font = "SourceSans"
+		hud.xpText.FontSize = "Size14"
+		hud.xpText.Text = "XP - #/# 100%"
+		
+		hud.hpBar = Instance.new("Frame", hud.statusBar)
+		hud.hpBar.Size = UDim2.new(0.5, -85, 0.3, 0)
+		hud.hpBar.Position = UDim2.new(0, 170, 0.2, 0)
+		hud.hpBar.ZIndex = 9
+		hud.hpBar.BackgroundColor3 = Color3.new(1,0,0)
+		hud.hpBar.BorderColor3 = Color3.new(0,0,0)
+		hud.hpBar.BorderSizePixel = 3
+		
+		hud.hpText = Instance.new("TextLabel", hud.hpBar)
+		hud.hpText.Size = UDim2.new(0,0,0,0)
+		hud.hpText.Position = UDim2.new(0.5,0,0.5,0)
+		hud.hpText.ZIndex = 9
+		hud.hpText.BackgroundTransparency = 1
+		hud.hpText.TextColor3 = Color3.new(1,1,1)
+		hud.hpText.TextStrokeTransparency = 0
+		hud.hpText.Font = "SourceSans"
+		hud.hpText.FontSize = "Size14"
+		hud.hpText.Text = "HP - 100/100"
+		
+		hud.spBar = Instance.new("Frame", hud.statusBar)
+		hud.spBar.Size = UDim2.new(0.5, -85, 0.3, 0)
+		hud.spBar.Position = UDim2.new(0.5, 85, 0.2, 0)
+		hud.spBar.ZIndex = 9
+		hud.spBar.BackgroundColor3 = Color3.new(0,0,1)
+		hud.spBar.BorderColor3 = Color3.new(0,0,0)
+		hud.spBar.BorderSizePixel = 3
+		
+		hud.spText = Instance.new("TextLabel", hud.spBar)
+		hud.spText.Size = UDim2.new(0,0,0,0)
+		hud.spText.Position = UDim2.new(0.5,0,0.5,0)
+		hud.spText.ZIndex = 9
+		hud.spText.BackgroundTransparency = 1
+		hud.spText.TextColor3 = Color3.new(1,1,1)
+		hud.spText.TextStrokeTransparency = 0
+		hud.spText.Font = "SourceSans"
+		hud.spText.FontSize = "Size14"
+		hud.spText.Text = "SP - 100/100"
 		
 		hud.tickCounter = Instance.new("TextLabel", hud.frame)
 		hud.tickCounter.Size = UDim2.new(0,100,0,40)
@@ -68,9 +124,11 @@ do Hud = Class("Hud")
 		
 		hud.chat = Instance.new("Frame", hud.frame)
 		hud.chat.Size = UDim2.new(0, 400, 0, 250)
-		hud.chat.Position = UDim2.new(0, 40, 1, -290)
+		hud.chat.Position = UDim2.new(0, 0, 1, -320)
 		hud.chat.BackgroundTransparency = 0.7
 		hud.chat.Name = "Chatbox"
+		hud.chat.BorderColor3 = Color3.new(0,0,0)
+		hud.chat.BorderSizePixel = 3
 		hud.chat.ClipsDescendants = true
 		hud.chat.ZIndex = 8
 		
