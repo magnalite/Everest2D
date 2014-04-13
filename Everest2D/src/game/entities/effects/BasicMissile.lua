@@ -45,7 +45,7 @@ do BasicMissile = Extends("BasicMissile", Entity)
 		basicMissile.culledEntityList = entitiesInRange
 		
 		coroutine.wrap(function() 
-			--[[while nonNil do 
+			while basicMissile do 
 				wait()
 				local particle = _G.GuiRecycling.getGui()
 				local particleSize = math.random(1,5)
@@ -59,7 +59,7 @@ do BasicMissile = Extends("BasicMissile", Entity)
 				particle:TweenPosition(particle.Position + UDim2.new(0, math.random(-20,20), 0, math.random(-20,20)), "Out", "Linear", 2, true)
 				coroutine.wrap(function() while particle.BackgroundTransparency < 1 do wait() particle.BackgroundTransparency = particle.BackgroundTransparency + 0.02 end end)()
 				coroutine.wrap(function() wait(6) _G.GuiRecycling.addGui(particle) end)()
-			end]]--
+			end
 		end)()
 		
 		return basicMissile

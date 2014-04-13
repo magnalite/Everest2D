@@ -161,6 +161,8 @@ do Game = Class("Game")
 
 	end
 	
+	Import("Item")
+	
 	function Game:render(deltaTime)
 		if not _G.isServer then
 		
@@ -173,6 +175,9 @@ do Game = Class("Game")
 				self.screen.hud.frameCounter.Text = "Frame Rate  " .. math.ceil(1/deltaTime)
 				self.player.level:render(deltaTime)
 				self.screen:render(deltaTime, self.player.posX - (self.screen.sizeX / 2), self.player.posY - (self.screen.sizeY / 2))
+				for _, v in pairs(Item.itemList) do
+					v:render()
+				end	
 			end
 		end
 	end
@@ -182,21 +187,14 @@ end
 Import("Server")
 
 do --MAIN
-	wait(2)
 	if script.Parent.Parent.Name == "Everest2DServer" then
 		Server.new()
 		_G.isServer = true
 		
-		--Tell people that everest is loading when they join
 		local loaderScreen = Instance.new("ScreenGui", game.StarterGui)
-		local loaderInfo = Instance.new("TextLabel", loaderScreen)
+		local loaderInfo = Instance.new("Frame", loaderScreen)
 		loaderInfo.Size = UDim2.new(1,0,1,0)
 		loaderInfo.BackgroundColor3 = Color3.new(0,0,0)
-		loaderInfo.Text = "Please wait - Everest2D is loading"
-		loaderInfo.TextScaled = true
-		loaderInfo.TextColor3 = Color3.new(0,0,0)
-		loaderInfo.TextStrokeColor3 = Color3.new(141 / 255, 70 / 255, 212 / 255)
-		loaderInfo.TextStrokeTransparency = 0
 		--Stops people falling when they join
 		local loaderBlock = Instance.new("Part", Workspace)
 		loaderBlock.Anchored = true
@@ -209,12 +207,74 @@ do --MAIN
 		game.Players.LocalPlayer.Character:Destroy()
 		game.StarterGui:SetCoreGuiEnabled(2, false)
 		game.StarterGui:SetCoreGuiEnabled(1, false)
-		wait(5)
+		
+		repeat wait() until game.Players.LocalPlayer.PlayerGui.ScreenGui
+		local loaderScreen = game.Players.LocalPlayer.PlayerGui.ScreenGui
+		local background = Instance.new("ImageLabel", loaderScreen)
+		background.Size = UDim2.new(1,0,1,0)
+		background.Image = "rbxassetid://153133549"
+		onStartScreen = true
+		coroutine.wrap(function() 
+			while onStartScreen do
+				wait(1/20)
+				local particle = Instance.new("Frame", background)
+				local size = math.random(5,10)
+				particle.BorderSizePixel = 0
+				particle.BackgroundColor3 = Color3.new(1,1,1)
+				particle.Size = UDim2.new(0,size,0,size/2)
+				particle.Transparency = math.random(30,60) / 100
+				local tX = loaderScreen.AbsoluteSize.X	
+				local tY = loaderScreen.AbsoluteSize.Y
+				local pos = UDim2.new(0, tX + tX * math.random(0,100)/100 - 10, 0, -0.5 * tY + tY * math.random(1,100) / 100)
+				particle.Position = pos
+				local waitTime = 1 / size * (270 + math.random(1,90))
+				local endPos = UDim2.new(0, -tX + tX * math.random(0,90) / 100 - 10, 0, tY + tY * math.random(1,100) / 100)
+				particle.Rotation = math.deg(math.tan((pos.Y.Offset - endPos.Y.Offset) / (pos.X.Offset - endPos.X.Offset)))
+				particle:TweenPosition(endPos, "Out", "Quad", waitTime)
+				game:GetService("Debris"):AddItem(particle, waitTime)
+			end
+		end)()
+		local fader = Instance.new("Frame", background)
+		fader.Size = UDim2.new(1,0,1,0)
+		fader.BackgroundTransparency = 0
+		fader.BackgroundColor3 = Color3.new(0,0,0)
+		coroutine.wrap(function() 
+			wait(5)
+			for i = 0, 1, 0.001 do
+				wait(1/30)
+				fader.BackgroundTransparency = i
+			end
+		end)()
+		local clipper = Instance.new("Frame", fader)
+		clipper.Size = UDim2.new(1,0,1,0)
+		clipper.BackgroundTransparency = 1
+		clipper.ClipsDescendants = true
+		local title = Instance.new("ImageLabel", clipper)
+		title.Size = UDim2.new(1,0,1,0)
+		title.Image = "rbxassetid://153133512"
+		coroutine.wrap(function() 
+			for i = 0, 1, 0.02 do
+				wait(1/60)
+				title.Position = UDim2.new(1-i,0,0,0)
+				clipper.Position = UDim2.new(i-1,0,0,0)
+			end
+		end)()
+		
+		wait(30)
+		
+		
+		Import("TestStaff")
+		coroutine.wrap(function()
+			local staff = TestStaff.new("Inventory")
+			staff.inventorySlot = 0
+		end)()
 	end
 	--waits for the server to start up (it creates the packethandler)
 	repeat wait() until Workspace:FindFirstChild("PacketHandler")
 	local game = Game.new()
 	_G.localgame = game
 	repeat wait() until game.start
+	onStartScreen = false
+	wait(1)
 	game:start()
 end

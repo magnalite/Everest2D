@@ -71,7 +71,7 @@ do TestMob = Extends("TestMob", Mob)
 		
 		self.frame:TweenSize(UDim2.new(0, 32 * self.scale, 0, 32 * self.scale), "Out", "Linear", 0.2, true)
 		
-		--[[if math.random(1, 3) == 3 then
+		if math.random(1, 3) == 3 then
 			local particle = _G.GuiRecycling.getGui()
 			local particleSize = math.random(3,8)
 			particle.Size = UDim2.new(0,particleSize,0,particleSize)
@@ -84,7 +84,7 @@ do TestMob = Extends("TestMob", Mob)
 			particle:TweenPosition(particle.Position + UDim2.new(0, math.random(-40,40), 0, math.random(-40,40)), "Out", "Linear", 2, true)
 			coroutine.wrap(function() while particle.BackgroundTransparency < 1 do wait() particle.BackgroundTransparency = particle.BackgroundTransparency + 0.02 end end)()
 			coroutine.wrap(function() wait(6) _G.GuiRecycling.addGui(particle) end)()
-		end]]--
+		end
 		
 	end
 	

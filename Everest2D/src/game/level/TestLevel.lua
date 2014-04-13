@@ -52,9 +52,9 @@ Import("TestMob")
 
 wait(10)
 if _G.isServer then
-	local mob = TestMob.new(nil, _G.localgame, Level.TestLevel, 1000, 1000, "!testmob!", 30, 30)
-	for i = 1, 300 do
-		TestMob.new(nil, _G.localgame, Level.TestLevel, 1000, 1000, "!testmob!", math.random(1,100), math.random(1,100))
+	local mob = TestMob.new(nil, _G.localgame, Level.TestLevel, 100, 100, "!testmob!", 30, 30)
+	for i = 1, 20 do
+		TestMob.new(nil, _G.localgame, Level.TestLevel, 100, 100, "!testmob!", math.random(1,100), math.random(1,100))
 	end
 end	
 	

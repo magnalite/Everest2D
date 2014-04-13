@@ -24,6 +24,7 @@ do Mob = Extends("Mob", Entity)
 		mob.isMoving = false
 		mob.movingDir = "SOUTH"
 		mob.scale = 1
+		mob.inventory = {}
 		mob.frame = Instance.new("ImageLabel", game.screen.frame)
 		mob.frame.BorderSizePixel = 0
 		mob.frame.BackgroundTransparency = 1

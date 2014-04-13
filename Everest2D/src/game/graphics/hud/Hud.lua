@@ -7,6 +7,7 @@ Import("Class")
 
 do Hud = Class("Hud")
 	
+	Import("Inventory")
 	function Hud.new(screen)
 		local hud = {}
 		setmetatable(hud, Hud)
@@ -132,9 +133,16 @@ do Hud = Class("Hud")
 		hud.chat.ClipsDescendants = true
 		hud.chat.ZIndex = 8
 		
-		hud.playerHealth = Instance.new("TextLabel", hud.playerInfo)
+		hud.inventory = Inventory.new(hud)
 		
+		hud.inventoryButton = Instance.new("ImageButton", hud.frame)
+		hud.inventoryButton.Position = UDim2.new(0,400,1,-110)
+		hud.inventoryButton.Size = UDim2.new(0,40,0,40)
+		hud.inventoryButton.Image = "http://www.roblox.com/asset/?id=149947909"
+		hud.inventoryButton.BackgroundTransparency = 1
+		hud.inventoryButton.ZIndex = 9
 		
+		hud.inventoryButton.MouseButton1Click:connect(function() hud.inventory:toggleVisibility() end)
 		
 		return hud
 	end
