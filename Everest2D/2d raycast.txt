@@ -1,0 +1,45 @@
+--raycasting unused for now
+		--[[local hitTable = {}
+		
+		
+		for _, v in ipairs(basicMissile.level.entities) do
+			if v.name ~= "BasicMissile" then
+				
+				local testPos = Vector2.new(v.posX, v.posY) - currentPos
+				local distToTarget = testPos.magnitude
+				
+				if distToTarget < 30 then
+				
+					local ang = math.acos((dirVec.X * testPos.X + dirVec.Y * testPos.Y) / (dirVec.magnitude * testPos.magnitude))
+					
+					if ang < math.rad(90) then
+					
+						local distFromIntersect = math.abs(distToTarget * math.sin(ang))
+						print(v.levelId, distFromIntersect, math.deg(ang))
+						
+						if distFromIntersect < v.scale / 2 then
+							table.insert(hitTable, v)
+						end
+					end
+				end
+			end
+		end
+		
+		local closestHitDist = math.huge
+		local closestHit
+		
+		for _, v in pairs(hitTable) do
+			if (currentPos - Vector2.new(v.posX, v.posY)).magnitude < closestHitDist then
+				closestHitDist = (currentPos - Vector2.new(v.posX, v.posY)).magnitude
+				closestHit = v
+			end
+		end
+	
+		if closestHit and closestHitDist <= (currentPos - basicMissile.endPos).magnitude then
+			basicMissile.endPos = Vector2.new(closestHit.posX, closestHit.posY)
+		end
+		
+		
+		local timeToTake = (Vector2.new(posX, posY) - basicMissile.endPos).magnitude^.5 / speed
+		basicMissile.frame:TweenPosition(UDim2.new(0, basicMissile.endPos.X * 32, 0, basicMissile.endPos.Y * 32), "Out", "Linear", timeToTake, true)
+		local nonNil = true]]--
