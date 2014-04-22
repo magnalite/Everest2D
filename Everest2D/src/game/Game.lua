@@ -1,73 +1,142 @@
---The game class coordinates all of the games calls and functions
+--[[
+----------------------
+--- Main Game Class---
+----------------------
+
+Contains these functions
+
+.new()
+--Constructs a new Game class
+--Returns a Game class construct
+
+:start()
+--Starts Game running
+--Returns nothing
+
+:stop()
+--Stops the game running
+--Returns nothing
+
+:run()
+**Should only be called by :start()**
+--Initialises the main game loop
+--Returns nothing
+
+:tick(deltaTime)
+**Should only be called by :run()**
+--Steps game logic by one tick
+--Returns nothing
+
+:render(deltaTime)
+**Should only be called by :run()**
+--Renders the game logic in it's current state
+--Returns nothing
+
+--]]
 
 
---Allows access to the datamodel
+--Allows scripts to continue execution while in nil (To allow for nil'd players)
 if script.Parent.ClassName == "LocalScript" then game.Players.LocalPlayer.PlayerGui.Everest2D.Parent = nil end
-
+--Allows access to the datamodel
 _G.rbxGame = game
+--Wait for Import to become available
 repeat wait() until _G.Import
 _G.Import("Import")
 
+--Import the Class define function from game.util
 Import("Class")
 
 --Defines the game class
 do Game = Class("Game")
 
+
+	--Requires no arguments
+	--Constructs a new Game class
+	--Returns a new game class construct
 	function Game.new()
 		local game = {}
 		setmetatable(game, Game)
-
+		
+		--Import a Screen object from game.graphics.Screen
+		--Used to render clientside
 		Import("Screen")
 		
-		if not _G.isServer then 
+		--If this is clientside then
+		if not _G.isServer then
+			--Get the players screen size in pixels
 			local tempScreenSize = LocalPlayer.PlayerGui.ScreenGui.AbsoluteSize
-
+			--Add their screen size as a variable in game
+			--Has to be a ScreenGui so it resizes in real time
+			--Allows it to be accessed later for use in rendering screen
 			game.screenSizeHolder = LocalPlayer.PlayerGui.ScreenGui
-			
+			--Remove all the children from screenSizeHolder so nothing in rendering in it
 			for _, v in pairs(game.screenSizeHolder:GetChildren()) do v:Destroy() end
-			
-
-			
+			--The part the game will be drawn on
+			--In CurrentCamera so it is local to the user
 			game.canvasPart = Instance.new("Part", Workspace.CurrentCamera)
 			game.canvasPart.Anchored = true
 			game.canvasPart.FormFactor = "Custom"
-			game.canvasPart.Size = Vector3.new(3*math.tan(math.rad(35)) * 2 * (tempScreenSize.X/(tempScreenSize.Y+20)) , 3*math.tan(math.rad(35)) * 2, 0)
+			--X size is 3*tan(fov/2) * 2 * aspect ratio
+			-- -- fov is divided by 2 to make a right angle triangle
+			-- -- 3 * tan as it will be 3 studs away
+			-- -- 2 * as the fov is divided by two
+			-- -- +20 to the screen size to account for chat bar
 			
+			--Y size is 3 * tan(fov/2) * 2
+			-- -- fov is divided by 2 to make a right angle triangle
+			-- -- 3 * tan as it will be 3 studs away
+			-- -- 2 * as the fov is divided by two
+			
+			--Z size is 0 as we are only looking at the front face(Therefore 2D)
+			game.canvasPart.Size = Vector3.new(3*math.tan(math.rad(35)) * 2 * (tempScreenSize.X/(tempScreenSize.Y+20)) , 3*math.tan(math.rad(35)) * 2, 0)
+			--Stop user control on camera
 			Workspace.CurrentCamera.CameraType = "Scriptable"
+			--Aim the camera at the canvasPart (where the game will be played on)
 			Workspace.CurrentCamera.CameraSubject = game.canvasPart
 			Workspace.CurrentCamera.CoordinateFrame = CFrame.new(game.canvasPart.Position + game.canvasPart.CFrame.lookVector*3.1, game.canvasPart.Position)
 			Workspace.CurrentCamera.Focus = game.canvasPart.CFrame
-			
+			--Place a SurfaceGui on the canvasPart
+			--This will contain the game graphics
+			--A SurfaceGui to allow for nil'd players
 			game.canvas = Instance.new("SurfaceGui", game.canvasPart)
 			game.canvas.CanvasSize = tempScreenSize
 			game.canvas.Adornee = game.canvasPart
-			
+			--If the players screen size changes then
+			--Update all the screen size values
 			game.screenSizeHolder.Changed:connect(function() 
 				local tempScreenSize = game.screenSizeHolder.AbsoluteSize
+				--Look above for explanation
 				game.canvasPart.Size = Vector3.new(3*math.tan(math.rad(35)) * 2 * (tempScreenSize.X/(tempScreenSize.Y+20)) , 3*math.tan(math.rad(35)) * 2, 0)
 				game.canvas.CanvasSize = tempScreenSize
 				if game.screen then
+					--Divided by 32 as tiles are 32x32
 					game.screen.sizeX = game.canvas.AbsoluteSize.X / 32
 					game.screen.sizeY = game.canvas.AbsoluteSize.Y / 32
 				end
 			end)
 			
-			
-			
+			--Import InputHandler to allow for easy handling of user input
 			Import("InputHandler")
+			--Import ClientPacketHandler so we can start replication
 			Import("ClientPacketHandler")
 			
 			game.localPlayer = LocalPlayer
+			--Initialise the InputHandler and ClientPacketHandler
 			game.inputHandler = InputHandler.new(game)
 			game.packetHandler = ClientPacketHandler.new()
 			
+		--If this is a server
 		else
+			--Set the name of "localplayer" to "Server"
+			--Allows code to tell if this is a server later on
 			game.localPlayer = {Name = "Server"}
+			--Set canvas to ScreenGui in ServerStorage
+			--Stop errors when code tries to change graphics
 			game.canvas = Instance.new("ScreenGui", game.ServerStorage)
 			
 		end
 		game.canvas.Name = "Everest2DGame"
-
+		-- divided by 32 as tiles are 32x32
 		game.screen = Screen.new(game, math.ceil(game.canvas.AbsoluteSize.X / 32), math.ceil(game.canvas.AbsoluteSize.Y / 32))
 		game.running = false
 

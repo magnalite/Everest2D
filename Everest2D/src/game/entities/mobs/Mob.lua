@@ -9,7 +9,6 @@ Import("Entity")
 do Mob = Extends("Mob", Entity)
 
 	function Mob.new(id, game, level, hp, maxHp, name, speed, posX, posY, type)
-		print(id, game, level, hp, maxHp, name, speed, posX, posY, type)
 		local mob = Entity.new(id, level, posX, posY)
 		setmetatable(mob, Mob)
 
